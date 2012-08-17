@@ -1,0 +1,184 @@
+
+<html> 
+<head> 
+<title>Hello, WebGL (adopted from Learning WebGL lesson 2)</title> 
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"> 
+ 
+<script id="shader-fs" type="x-shader/x-fragment"> 
+    precision mediump float;
+    uniform sampler2D tex;
+    varying vec2 texCoord;
+    void main(void) {
+        gl_FragColor = texture2D(tex, texCoord);
+    }
+</script> 
+ 
+<script id="shader-vs" type="x-shader/x-vertex"> 
+    attribute vec3 positionAttr;
+    attribute vec2 texCoordAttr;
+    varying vec2 texCoord;
+    void main(void) {
+        gl_Position = vec4(positionAttr, 1.0);
+        texCoord = texCoordAttr;
+    }
+</script> 
+ 
+<script type="text/javascript"> 
+    var gl = null;
+    var viewportWidth = 0;
+    var viewportHeight = 0;
+ 
+    function initGL(canvas) {
+        try {
+            gl = canvas.getContext("webgl");
+            if (!gl)
+                gl = canvas.getContext("experimental-webgl");
+            if (gl) {
+                viewportWidth = canvas.width;
+                viewportHeight = canvas.height;
+            }
+        } catch (e) {
+        }
+        // Not the best error detection logic.
+        // Redirect to http://get.webgl.org in failure case.
+        if (!gl) {
+            alert("Could not initialise WebGL, sorry :-(");
+        }
+    }
+ 
+    function getShader(gl, id) {
+        var script = document.getElementById(id);
+        if (!script) {
+            return null;
+        }
+ 
+        var shader;
+        if (script.type == "x-shader/x-fragment") {
+            shader = gl.createShader(gl.FRAGMENT_SHADER);
+        } else if (script.type == "x-shader/x-vertex") {
+            shader = gl.createShader(gl.VERTEX_SHADER);
+        } else {
+            return null;
+        }
+ 
+        gl.shaderSource(shader, script.text);
+        gl.compileShader(shader);
+ 
+        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+            alert(gl.getShaderInfoLog(shader));
+            return null;
+        }
+ 
+        return shader;
+    }
+ 
+    var program;
+ 
+    function initShaders() {
+        var vertexShader = getShader(gl, "shader-vs");
+        var fragmentShader = getShader(gl, "shader-fs");
+ 
+        program = gl.createProgram();
+        gl.attachShader(program, vertexShader);
+        gl.attachShader(program, fragmentShader);
+        gl.linkProgram(program);
+ 
+        if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+            alert("Could not initialise shaders");
+        }
+ 
+        gl.useProgram(program);
+ 
+        program.positionAttr = gl.getAttribLocation(program, "positionAttr");
+        gl.enableVertexAttribArray(program.positionAttr);
+ 
+        program.texCoordAttr = gl.getAttribLocation(program, "texCoordAttr");
+        gl.enableVertexAttribArray(program.texCoordAttr);
+
+        program.textureLoc = gl.getUniformLocation(program, "tex");
+    }
+ 
+    var buffer;
+ 
+    function initGeometry() {
+        buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+        // Interleave vertex positions and colors
+        var vertexData = [
+            // X    Y     Z     U     V
+            0.0,   0.8,  0.0,  0.5,  1.0,
+            // X    Y     Z     U     V
+            -0.8, -0.8,  0.0,  0.0,  0.0,
+            // X    Y     Z     U     V
+            0.8,  -0.8,  0.0,  1.0,  0.0,
+        ];
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexData), gl.STATIC_DRAW);
+    }
+ 
+    var texture;
+
+    function loadTexture(src) {
+        // Create and initialize the WebGLTexture object.
+        texture = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        // Create a DOM image object.
+        var image = new Image();
+
+        // Set up the onload handler for the image, which will be called by
+        // the browser at some point in the future once the image has
+        // finished downloading.
+        image.onload = function() {
+            gl.bindTexture(gl.TEXTURE_2D, texture);
+            gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+            gl.texImage2D(
+                gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+            drawScene();
+        };
+        // Start downloading the image by setting its source.
+        image.src = src;
+    }
+
+    function drawScene() {
+        gl.viewport(0, 0, viewportWidth, viewportHeight);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+ 
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+
+        // There are 5 floating-point values per vertex
+        var stride = 5 * Float32Array.BYTES_PER_ELEMENT;
+
+        // Set up position stream
+        gl.vertexAttribPointer(program.positionAttr, 3, gl.FLOAT, false, stride, 0);
+        // Set up texCoord stream
+        gl.vertexAttribPointer(program.texCoordAttr, 2, gl.FLOAT, false, stride, 3 * Float32Array.BYTES_PER_ELEMENT);
+
+        // Bind the texture to texture unit 0
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        // Point the uniform sampler to texture unit 0
+        gl.uniform1i(program.textureLoc, 0);
+
+        gl.drawArrays(gl.TRIANGLES, 0, 3);
+    }
+ 
+    function webGLStart() {
+        var canvas = document.getElementById("lesson02-canvas");
+        initGL(canvas);
+        initShaders()
+        initGeometry();
+
+        gl.clearColor(0.0, 0.0, 0.0, 1.0);
+        gl.disable(gl.DEPTH_TEST);
+
+        loadTexture("images/webgl-logo-pot.png");
+    }
+ 
+</script> 
+</head> 
+ 
+<body onload="webGLStart();"> 
+    <canvas id="lesson02-canvas" style="border: none;" width="400" height="400"></canvas> 
+</body> 
+ 
+</html>

@@ -1,0 +1,85 @@
+
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  
+  <!-- disable zooming -->
+  <meta name="viewport" content="initial-scale=1.0; minimum-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+  
+  <title>Perspective 1 &middot; Intro to CSS 3D transforms &rsaquo; Examples</title>
+  
+    <link rel="stylesheet" href="../css/style.css" media="screen" />
+
+    <style media="screen">
+  
+    .container {
+      width: 200px;
+      height: 200px;
+      border: 1px solid #CCC;
+      margin: 0 auto 40px;
+    }
+  
+    .box {
+      width: 100%;
+      height: 100%;
+    }
+  
+    #red .box {
+      background-color: red;
+      -webkit-transform: perspective( 600 ) rotateY( 45deg );
+    }
+
+    #blue {
+      -webkit-perspective: 600;
+    
+    }
+
+    #blue .box {
+      background-color: blue;
+      -webkit-transform: rotateY( 45deg );
+    }
+  </style>
+
+</head>
+<body>
+
+  <h1>Perspective 1</h1>
+
+<div class="highlight"><pre><code class="css"><span class="nf">#red</span> <span class="nc">.box</span> <span class="p">{</span>
+  <span class="k">background-color</span><span class="o">:</span> <span class="nb">red</span><span class="p">;</span>
+  <span class="o">-</span><span class="n">webkit</span><span class="o">-</span><span class="n">transform</span><span class="o">:</span> <span class="n">perspective</span><span class="p">(</span> <span class="m">600</span> <span class="p">)</span> <span class="n">rotateY</span><span class="p">(</span> <span class="m">45</span><span class="n">deg</span> <span class="p">);</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+  <section id="red" class="container">
+    <div class="box red"></div>
+  </section>
+
+<div class="highlight"><pre><code class="css"><span class="nf">#blue</span> <span class="p">{</span>
+  <span class="o">-</span><span class="n">webkit</span><span class="o">-</span><span class="n">perspective</span><span class="o">:</span> <span class="m">600</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nf">#blue</span> <span class="nc">.box</span> <span class="p">{</span>
+  <span class="k">background-color</span><span class="o">:</span> <span class="nb">blue</span><span class="p">;</span>
+  <span class="o">-</span><span class="n">webkit</span><span class="o">-</span><span class="n">transform</span><span class="o">:</span> <span class="n">rotateY</span><span class="p">(</span> <span class="m">45</span><span class="n">deg</span> <span class="p">);</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+  <section id="blue" class="container">
+    <div class="box"></div>
+  </section>
+
+  <script src="../js/utils.js"></script>
+
+  
+  <footer>
+    <p id="disclaimer">Sorry, your browser does not support CSS 3D transforms. Try viewing this page in <a href="http://www.apple.com/safari/">Safari</a> or on an iOS device.</p>
+    <p>Example for <a href="../">Intro to CSS 3D transforms</a> by David DeSandro</p>
+  </footer>
+
+</body>
+</html>

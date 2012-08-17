@@ -1,0 +1,158 @@
+
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  
+  <!-- disable zooming -->
+  <meta name="viewport" content="initial-scale=1.0; minimum-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+  
+  <title>Carousel &middot; Intro to CSS 3D transforms &rsaquo; Docs</title>
+  
+    <link rel="stylesheet" href="../css/style.css" media="screen" />
+
+</head>
+<body class="doc">
+
+  <nav>
+  <h1><a href="../">Intro to CSS 3D transforms</a></h1>
+  <ul>
+    
+      <li><a href="../docs/introduction.html">Introduction</a></li>
+    
+      <li><a href="../docs/perspective.html">Perspective</a></li>
+    
+      <li><a href="../docs/3d-transform-functions.html">3d transform functions</a></li>
+    
+      <li><a href="../docs/card-flip.html">Card Flip</a></li>
+    
+      <li><a href="../docs/cube.html">Cube</a></li>
+    
+      <li><a href="../docs/rectangular-prism.html">Rectangular prism</a></li>
+    
+      <li class="current"><a href="../docs/carousel.html">Carousel</a></li>
+    
+      <li><a href="../docs/conclusion.html">Conclusion</a></li>
+    
+  </ul>
+</nav>
+
+  <section id="content">
+
+    <h1>Carousel</h1>
+
+    <p>Front-end developers have a myriad of choices when it comes to content carousels. Now that we have 3D capabilities in our browsers, why not give a shot at creating an actual 3D carousel?</p>
+
+<p>The markup for this demo takes the same form as the box, cube, and card. Let&#8217;s make it interesting and have a carousel with 9 panels.</p>
+<div class='highlight'><pre><code class='html'><span class='nt'>&lt;section</span> <span class='na'>class=</span><span class='s'>&quot;container&quot;</span><span class='nt'>&gt;</span>
+  <span class='nt'>&lt;div</span> <span class='na'>id=</span><span class='s'>&quot;carousel&quot;</span><span class='nt'>&gt;</span>
+    <span class='nt'>&lt;figure&gt;</span>1<span class='nt'>&lt;/figure&gt;</span>
+    <span class='nt'>&lt;figure&gt;</span>2<span class='nt'>&lt;/figure&gt;</span>
+    <span class='nt'>&lt;figure&gt;</span>3<span class='nt'>&lt;/figure&gt;</span>
+    <span class='nt'>&lt;figure&gt;</span>4<span class='nt'>&lt;/figure&gt;</span>
+    <span class='nt'>&lt;figure&gt;</span>5<span class='nt'>&lt;/figure&gt;</span>
+    <span class='nt'>&lt;figure&gt;</span>6<span class='nt'>&lt;/figure&gt;</span>
+    <span class='nt'>&lt;figure&gt;</span>7<span class='nt'>&lt;/figure&gt;</span>
+    <span class='nt'>&lt;figure&gt;</span>8<span class='nt'>&lt;/figure&gt;</span>
+    <span class='nt'>&lt;figure&gt;</span>9<span class='nt'>&lt;/figure&gt;</span>
+  <span class='nt'>&lt;/div&gt;</span>
+<span class='nt'>&lt;/section&gt;</span>
+</code></pre>
+</div>
+<p>Now apply basic layout styles. Let&#8217;s give each panel of the <code>#carousel</code> 20px gaps between one another, done here with <code>left: 10px;</code> and <code>top: 10px;</code>. The effective width of each panel remains 210px.</p>
+<div class='highlight'><pre><code class='css'><span class='nc'>.container</span> <span class='p'>{</span>
+  <span class='k'>width</span><span class='o'>:</span> <span class='m'>210px</span><span class='p'>;</span>
+  <span class='k'>height</span><span class='o'>:</span> <span class='m'>140px</span><span class='p'>;</span>
+  <span class='k'>position</span><span class='o'>:</span> <span class='k'>relative</span><span class='p'>;</span>
+  <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>perspective</span><span class='o'>:</span> <span class='m'>1000</span><span class='p'>;</span>
+<span class='p'>}</span>
+
+<span class='nf'>#carousel</span> <span class='p'>{</span>
+  <span class='k'>width</span><span class='o'>:</span> <span class='m'>100%</span><span class='p'>;</span>
+  <span class='k'>height</span><span class='o'>:</span> <span class='m'>100%</span><span class='p'>;</span>
+  <span class='k'>position</span><span class='o'>:</span> <span class='k'>absolute</span><span class='p'>;</span>
+  <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>-</span><span class='n'>style</span><span class='o'>:</span> <span class='n'>preserve</span><span class='m'>-3</span><span class='err'>d</span><span class='p'>;</span>
+<span class='p'>}</span>
+
+<span class='nf'>#carousel</span> <span class='nt'>figure</span> <span class='p'>{</span>
+  <span class='k'>display</span><span class='o'>:</span> <span class='k'>block</span><span class='p'>;</span>
+  <span class='k'>position</span><span class='o'>:</span> <span class='k'>absolute</span><span class='p'>;</span>
+  <span class='k'>width</span><span class='o'>:</span> <span class='m'>186px</span><span class='p'>;</span>
+  <span class='k'>height</span><span class='o'>:</span> <span class='m'>116px</span><span class='p'>;</span>
+  <span class='k'>left</span><span class='o'>:</span> <span class='m'>10px</span><span class='p'>;</span>
+  <span class='k'>top</span><span class='o'>:</span> <span class='m'>10px</span><span class='p'>;</span>
+  <span class='k'>border</span><span class='o'>:</span> <span class='m'>2px</span> <span class='k'>solid</span> <span class='nb'>black</span><span class='p'>;</span>
+<span class='p'>}</span>
+</code></pre>
+</div>
+<p>Next up: rotating the faces. This <code>#carousel</code> has 9 panels. If each panel gets an equal distribution on the carousel, each panel would be rotated 40 degrees from the next ( 360 / 9 ).</p>
+<div class='highlight'><pre><code class='css'><span class='nf'>#carousel</span> <span class='nt'>figure</span><span class='nd'>:nth-child</span><span class='o'>(</span><span class='nt'>1</span><span class='o'>)</span> <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateY</span><span class='p'>(</span>   <span class='m'>0</span><span class='n'>deg</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#carousel</span> <span class='nt'>figure</span><span class='nd'>:nth-child</span><span class='o'>(</span><span class='nt'>2</span><span class='o'>)</span> <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateY</span><span class='p'>(</span>  <span class='m'>40</span><span class='n'>deg</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#carousel</span> <span class='nt'>figure</span><span class='nd'>:nth-child</span><span class='o'>(</span><span class='nt'>3</span><span class='o'>)</span> <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateY</span><span class='p'>(</span>  <span class='m'>80</span><span class='n'>deg</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#carousel</span> <span class='nt'>figure</span><span class='nd'>:nth-child</span><span class='o'>(</span><span class='nt'>4</span><span class='o'>)</span> <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateY</span><span class='p'>(</span> <span class='m'>120</span><span class='n'>deg</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#carousel</span> <span class='nt'>figure</span><span class='nd'>:nth-child</span><span class='o'>(</span><span class='nt'>5</span><span class='o'>)</span> <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateY</span><span class='p'>(</span> <span class='m'>160</span><span class='n'>deg</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#carousel</span> <span class='nt'>figure</span><span class='nd'>:nth-child</span><span class='o'>(</span><span class='nt'>6</span><span class='o'>)</span> <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateY</span><span class='p'>(</span> <span class='m'>200</span><span class='n'>deg</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#carousel</span> <span class='nt'>figure</span><span class='nd'>:nth-child</span><span class='o'>(</span><span class='nt'>7</span><span class='o'>)</span> <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateY</span><span class='p'>(</span> <span class='m'>240</span><span class='n'>deg</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#carousel</span> <span class='nt'>figure</span><span class='nd'>:nth-child</span><span class='o'>(</span><span class='nt'>8</span><span class='o'>)</span> <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateY</span><span class='p'>(</span> <span class='m'>280</span><span class='n'>deg</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#carousel</span> <span class='nt'>figure</span><span class='nd'>:nth-child</span><span class='o'>(</span><span class='nt'>9</span><span class='o'>)</span> <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateY</span><span class='p'>(</span> <span class='m'>320</span><span class='n'>deg</span> <span class='p'>);</span> <span class='p'>}</span>
+</code></pre>
+</div>
+<p>Now the outward shift. Back when we were creating cube and boxes, the <code>translate</code> value was simple to calculate, as it was equal to one half the width, height, or depth of the object. Now with a carousel, there is no size we can immediately reference. We&#8217;ll have calculate the distance for the shift by other means.</p>
+
+<p>Drawing out a diagram of the carousel, we see that we only know two things: the width of each panel is 210px and the each panel is rotated 40 degrees from the next. If we split one of these triangles down its center, we get a right triangle, prime for some trigonometry.</p>
+
+<p><img src='../img/diagram.png' alt='Geometric diagram of carousel' /></p>
+
+<p>We can determine the length of <em>r</em> in this diagram with a basic tangent equation.</p>
+
+<p><img src='../img/calc.png' alt='Trigonometric calculation' /></p>
+
+<p>There you have it, <code>288px</code> is the distance to translate the panels out in 3D space.</p>
+<div class='highlight'><pre><code class='css'><span class='nf'>#carousel</span> <span class='nt'>figure</span><span class='nd'>:nth-child</span><span class='o'>(</span><span class='nt'>1</span><span class='o'>)</span> <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateY</span><span class='p'>(</span>   <span class='m'>0</span><span class='n'>deg</span> <span class='p'>)</span> <span class='n'>translateZ</span><span class='p'>(</span> <span class='m'>288px</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#carousel</span> <span class='nt'>figure</span><span class='nd'>:nth-child</span><span class='o'>(</span><span class='nt'>2</span><span class='o'>)</span> <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateY</span><span class='p'>(</span>  <span class='m'>40</span><span class='n'>deg</span> <span class='p'>)</span> <span class='n'>translateZ</span><span class='p'>(</span> <span class='m'>288px</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#carousel</span> <span class='nt'>figure</span><span class='nd'>:nth-child</span><span class='o'>(</span><span class='nt'>3</span><span class='o'>)</span> <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateY</span><span class='p'>(</span>  <span class='m'>80</span><span class='n'>deg</span> <span class='p'>)</span> <span class='n'>translateZ</span><span class='p'>(</span> <span class='m'>288px</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#carousel</span> <span class='nt'>figure</span><span class='nd'>:nth-child</span><span class='o'>(</span><span class='nt'>4</span><span class='o'>)</span> <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateY</span><span class='p'>(</span> <span class='m'>120</span><span class='n'>deg</span> <span class='p'>)</span> <span class='n'>translateZ</span><span class='p'>(</span> <span class='m'>288px</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#carousel</span> <span class='nt'>figure</span><span class='nd'>:nth-child</span><span class='o'>(</span><span class='nt'>5</span><span class='o'>)</span> <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateY</span><span class='p'>(</span> <span class='m'>160</span><span class='n'>deg</span> <span class='p'>)</span> <span class='n'>translateZ</span><span class='p'>(</span> <span class='m'>288px</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#carousel</span> <span class='nt'>figure</span><span class='nd'>:nth-child</span><span class='o'>(</span><span class='nt'>6</span><span class='o'>)</span> <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateY</span><span class='p'>(</span> <span class='m'>200</span><span class='n'>deg</span> <span class='p'>)</span> <span class='n'>translateZ</span><span class='p'>(</span> <span class='m'>288px</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#carousel</span> <span class='nt'>figure</span><span class='nd'>:nth-child</span><span class='o'>(</span><span class='nt'>7</span><span class='o'>)</span> <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateY</span><span class='p'>(</span> <span class='m'>240</span><span class='n'>deg</span> <span class='p'>)</span> <span class='n'>translateZ</span><span class='p'>(</span> <span class='m'>288px</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#carousel</span> <span class='nt'>figure</span><span class='nd'>:nth-child</span><span class='o'>(</span><span class='nt'>8</span><span class='o'>)</span> <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateY</span><span class='p'>(</span> <span class='m'>280</span><span class='n'>deg</span> <span class='p'>)</span> <span class='n'>translateZ</span><span class='p'>(</span> <span class='m'>288px</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#carousel</span> <span class='nt'>figure</span><span class='nd'>:nth-child</span><span class='o'>(</span><span class='nt'>9</span><span class='o'>)</span> <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateY</span><span class='p'>(</span> <span class='m'>320</span><span class='n'>deg</span> <span class='p'>)</span> <span class='n'>translateZ</span><span class='p'>(</span> <span class='m'>288px</span> <span class='p'>);</span> <span class='p'>}</span>
+</code></pre>
+</div>
+<p>If we decide on changing the width of the panel or the number of panels, we only need to plug in those two variables into our equation to get the appropriate translateZ value. In JS terms, that equation would be:</p>
+<div class='highlight'><pre><code class='javascript'><span class='kd'>var</span> <span class='nx'>tz</span> <span class='o'>=</span> <span class='nb'>Math</span><span class='p'>.</span><span class='nx'>round</span><span class='p'>(</span> <span class='p'>(</span> <span class='nx'>panelSize</span> <span class='o'>/</span> <span class='mi'>2</span> <span class='p'>)</span> <span class='o'>/</span> 
+  <span class='nb'>Math</span><span class='p'>.</span><span class='nx'>tan</span><span class='p'>(</span> <span class='p'>(</span> <span class='p'>(</span> <span class='nb'>Math</span><span class='p'>.</span><span class='nx'>PI</span> <span class='o'>*</span> <span class='mi'>2</span> <span class='p'>)</span> <span class='o'>/</span> <span class='nx'>numberOfPanels</span> <span class='p'>)</span> <span class='o'>/</span> <span class='mi'>2</span> <span class='p'>)</span> <span class='p'>);</span>
+<span class='c1'>// or simplified to</span>
+<span class='kd'>var</span> <span class='nx'>tz</span> <span class='o'>=</span> <span class='nb'>Math</span><span class='p'>.</span><span class='nx'>round</span><span class='p'>(</span> <span class='p'>(</span> <span class='nx'>panelSize</span> <span class='o'>/</span> <span class='mi'>2</span> <span class='p'>)</span> <span class='o'>/</span> 
+  <span class='nb'>Math</span><span class='p'>.</span><span class='nx'>tan</span><span class='p'>(</span> <span class='nb'>Math</span><span class='p'>.</span><span class='nx'>PI</span> <span class='o'>/</span> <span class='nx'>numberOfPanels</span> <span class='p'>)</span> <span class='p'>);</span>
+</code></pre>
+</div>
+<p>Just like our previous 3D objects, to show any one panel, we need only to apply the reverse transform on the carousel. Here&#8217;s the style to show the fifth panel:</p>
+<div class='highlight'><pre><code class='css'><span class='nt'>-webkit-transform</span><span class='o'>:</span> <span class='nt'>translateZ</span><span class='o'>(</span> <span class='nt'>-288px</span> <span class='o'>)</span> <span class='nt'>rotateY</span><span class='o'>(</span> <span class='nt'>-160deg</span> <span class='o'>);</span>
+</code></pre>
+</div>
+<p><a href='../examples/carousel-01.html'><strong>See Example: Carousel 1</strong></a></p>
+
+<p><a href='../examples/carousel-01.html'><img src='../img/carousel01.png' alt='3D CSS carousel' /></a></p>
+
+<p>By now, you probably have two thoughts:</p>
+
+<ol>
+<li>Re-writing transform styles for each panel looks to be tedious.</li>
+
+<li>Why bother doing high school math &#8211; Aren&#8217;t robots supposed to be doing all this work for us?</li>
+</ol>
+
+<p>And you&#8217;re absolutely right. The repetitive nature of 3D objects lend themselves to scripting. We can offload all the monotonous transform styles to our dynamic script, which, if done right, will be more flexible than the hard-coded version.</p>
+
+<p><a href='../examples/carousel-02-dynamic.html'><strong>See Example: Carousel 2</strong></a></p>
+    
+  </section> <!-- #content -->
+  
+  <footer>
+    <p><a href="../../">Intro to CSS 3D transforms</a> by David DeSandro</p>
+  </footer>
+
+</body>
+</html>

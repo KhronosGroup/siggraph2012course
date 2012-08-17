@@ -1,0 +1,113 @@
+<html>
+<head>
+<title>Path API</title>
+<script type="application/javascript">
+    var lastPoint = null;
+    var isMouseDown = false;
+    
+    function pathAPICanvasDraw() {
+        var canvas = document.getElementById("pathAPICanvas");
+        var mouseX, mouseY;
+        var curX, curY;
+
+        if (canvas.getContext) {
+            var context = canvas.getContext("2d");
+            var w=canvas.width;
+            var h=canvas.height;
+            context.lineWidth=7;
+            context.strokeStyle = "blue";
+            
+            //the nose
+            context.beginPath();
+            context.moveTo(250,275);
+            context.lineTo(200,375);
+            context.lineTo(250,375);
+            context.stroke();
+
+            //the eyebrows
+            context.beginPath();
+            context.arc(190, 220, 40, 210 * Math.PI/180, 300 * Math.PI/180, false);
+            context.stroke();
+
+            context.beginPath();
+            context.arc(310, 220, 40, 240 * Math.PI/180, 330 * Math.PI/180, false);
+            context.stroke();
+
+            //the eyeballs
+            context.beginPath();
+            context.arc(190, 250, 40, 0, 2 * Math.PI, false);
+            context.stroke();
+            context.beginPath();
+            context.arc(310, 250, 40, 0, 2 * Math.PI, false);
+            context.stroke();
+
+            //the lower lip
+            context.moveTo(200, 400);
+            context.bezierCurveTo(225, 475, 275, 475, 300, 400);
+
+            //the upper lip
+            context.moveTo(200,400);
+            context.quadraticCurveTo(250, 450, 300, 400);
+            context.stroke();
+
+
+            canvas.addEventListener('mousemove',pathAPICanvasMove,false);
+            canvas.addEventListener('mousedown',pathAPICanvasDown,false);
+            canvas.addEventListener('mouseup',pathAPICanvasUp,false);
+        }
+    }
+    function pathAPICanvasDown(e){
+        isMouseDown = true;
+    }
+    function pathAPICanvasUp(e){
+        isMouseDown = false;
+    }
+
+    function findOffset(obj) {
+        var canvas = document.getElementById("pathAPICanvas");
+        var curX, curY;
+        curX = curY = 0;
+        if (obj.offsetParent) {
+            do {
+                curX += obj.offsetLeft;
+                curY += obj.offsetTop;
+            } while (obj = obj.offsetParent);
+            return {x:curX,y:curY};
+        }
+    }
+
+    function pathAPICanvasMove(e){
+        var canvas = document.getElementById("pathAPICanvas");
+        var mouseX, mouseY;
+        if (canvas) {
+            var pos = findOffset(canvas);
+            mouseX = e.pageX - pos.x;
+            mouseY = e.pageY - pos.y;
+
+
+            //get the context and draw to it IF the mouse is down
+            var context = canvas.getContext("2d");
+            if (lastPoint && isMouseDown) {
+                //context.beginPath();
+                context.moveTo(lastPoint[0], lastPoint[1]);
+                context.lineTo(mouseX, mouseY);
+                context.lineJoin = 'round';
+                context.stroke();
+            }
+            lastPoint = [mouseX, mouseY];
+        }
+    }
+    function pathAPICanvasInit() {
+        var canvas = document.getElementById("pathAPICanvas");
+        if (canvas.getContext) {
+            var context = canvas.getContext("2d");
+            context.font = "20pt Arial";
+            context.fillText("Click me once, then drag inside", 0,20);
+        }
+    }
+</script>
+</head>
+<body onload="pathAPICanvasInit()">
+<canvas id="pathAPICanvas" width = "500px" height="500px" style="border-style:solid; border-width: 2px; border-color: rgb(0,0,0);" onclick="pathAPICanvasDraw();"></canvas>
+</body>
+</html>

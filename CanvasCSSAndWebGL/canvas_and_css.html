@@ -1,0 +1,739 @@
+<!--
+Google IO 2012 HTML5 Slide Template
+
+Authors: Eric Bidelman <ebidel@gmail.com>
+         Luke Mahé <lukem@google.com>
+
+URL: https://code.google.com/p/io-2012-slides
+-->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SIGGRAPH 2012</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <!--<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">-->
+  <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+  <!--This one seems to work all the time, but really small on ipad-->
+  <!--<meta name="viewport" content="initial-scale=0.4">-->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="stylesheet" media="all" href="theme/css/default.css">
+  <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="theme/css/phone.css">
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->
+  <script src="canvas_and_css_config.js"></script>
+  <script data-main="js/slides" src="js/require-1.0.8.min.js"></script>
+</head>
+<body style="opacity: 0">
+
+<slides class="layout-widescreen">
+
+  <slide class="fill nobackground" style="background-image: url(images/siggraph2012-title.jpg)">
+  </slide>
+
+  <slide>
+      <hgroup>      <h1 class="title">Graphics Programming For the Web</h1>
+      </hgroup>
+      <article>
+          <table>
+              <tr><td>
+                  <img src="images/webgl.png"></td><td><img src="images/HTML5_Logo_256.png" width=256px></td><td><img src="images/webcl.png">
+              </td></tr>
+              <tr>
+                  <table>
+                      <tr>
+                          <td>Pushkar Joshi<br>Motorola Mobility</td>
+                          <td>Zhenyao Mo<br>Google Inc.</td>
+                          <td>Kenneth Russell<br>Google Inc.</td>
+                          <td>Mikael Bourges-Sevenier<br>Motorola Mobility</td>
+                      </tr>
+                  </table>
+              </tr>
+          </table>
+      </article>
+  </slide>
+
+  <!-- Introduction -->
+  <slide>
+      <hgroup>
+          <h1 class="title">Introduction</h1>
+      </hgroup></hgrop><article>
+
+      <table border=0>
+          <tr width=100%>
+              <td width=33%><img src="images/mint.png" width=100%></td><td width=33%><img src="images/chemdoodle.png" width=100%></td><td width=33%><img src="images/ninja.png" width=100%></td>
+          </tr>
+          <tr width=100% style="text-align: center;">
+              <td>Mint.com <br>(personal finance)</td><td>ChemDoodle.com<br>(scientific viz.)</td><td>Motorola Ninja<br>(creative design)</td>
+          </tr>
+
+      </table>
+  </article>
+  </slide>
+
+  <!-- Overview/Schedule -->
+  <slide>
+      <hgroup><h1 class="title">Course Overview</h1></hgroup>
+      <article>
+
+
+                      <table border=0 class="larger">
+                          <tr>
+                              <td>9:05 am</td> <td>Canvas & CSS</td> <td>(Joshi)</td>
+                          </tr>
+
+                          <tr>
+                              <td>10:00 am</td> <td>WebGL Part 1</td> <td>(Mo)</td>
+                          </tr>
+                          <tr>
+                              <td>10:30 am</td> <td>break</td> <td> </td>
+                          </tr>
+                          <tr>
+                              <td>10:45 am</td> <td>WebGL Part 2 </td> <td>(Russell)</td>
+                          </tr>
+                          <tr>
+                              <td>11:30 am</td> <td>WebCL</td> <td>(Bourges-Sevenier)</td>
+                          </tr>
+                          <tr>
+                              <td>12:10 pm</td> <td>End</td> <td> </td>
+                          </tr>
+
+                      </table>
+      </article>
+  </slide>
+
+  <!-- Web Programming Primer -->
+  <slide>
+      <hgroup><h1 class="title">Web Programming Primer</h1></hgroup>
+      <article>
+
+          <table>
+              <tr class="build">
+                  <td style="width: 50%;"><img src="images/DOMtree.png" width="100%"></td>
+                  <td style="width: 50%;"><img src="images/renderingPipeline.png" width="100%"></td>
+              </tr>
+              <tr class="build">
+                  <td style="width: 50%; font-size: 120%;" class="larger">JavaScript (ECMAScript):<br>
+                      <ul>
+                          <li>Prototype v/s object-oriented
+                          <li>Can be confusing for C++/Java programmers
+                      </ul>
+                  </td>
+                  <td style="width: 50%; text-align: center"><img src="images/v8-1.png" width="75%"> <br> V8 Benchmarks per Chrome Version</td>
+              </tr>
+          </table>
+
+      </article>
+  </slide>
+
+  <slide class="title-slide segue nobackground">
+    <aside class="sglogobar"><img src="images/siggraph2012-logo-with-alpha.png"></aside>
+    <!-- The content of this hgroup is replaced programmatically through the slide_config.json. -->
+    <hgroup class="auto-fadein">
+      <h1 data-config-title><!-- populated from slide_config.json --> </h1>
+      <h2 data-config-subtitle><!-- populated from slide_config.json --> </h2>
+      <p data-config-presenter><!-- populated from slide_config.json </p> -->
+    </hgroup>
+  </slide>
+
+
+  <!-- Canvas intro slide -->
+  <slide>
+      <hgroup><h1 class="title">Canvas</h1></hgroup>
+  <article>
+	<div class="build">
+    <img src="images/canvasTag.png" width="100%"></td>
+    <img src="images/canvasPaint.png" style="position: absolute; left: 30%; top: 30%; width: 60%; height: 60%; border-style:solid; border-width: 2px; border-color: rgb(0,0,0);">
+	</div>
+  </article>
+  </slide>
+
+
+  <!-- 2D Drawing Context -->
+  <slide>
+      <hgroup>
+          <h1 class="title">Drawing Context</h1>
+  </hgroup>
+  <article>
+
+      <div class="build">
+        <pre class="prettyprint" data-lang="javascript">
+&lt;script type='text/javascript'&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;script type="text/javascript"&gt;
+function initCanvas() {
+    var canvas = document.getElementById("mycanvas");
+    if (canvas.getContext) {
+           <b>var context = canvas.getContext("2d");</b>
+           //issue drawing commands here...
+     }
+  }
+}
+&lt;/script&gt;
+&lt;/head&gt;
+</pre>
+
+<!-- <pre class="prettyprint" data-lang="javascript">
+&lt;body onload="initCanvas()"&gt;
+&lt;canvas id="mycanvas" width=“150" height="150"
+style="position: relative; left:100; top: 25; background-color:#CCCCFF"&gt;
+    Fallback content goes here
+&lt;/canvas&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre> -->         
+      </div>
+  </article>
+  </slide>
+
+  <!-- Path API-->
+  <script type="application/javascript">
+      var isMouseDown = false;
+      var draggedPaths = [];
+      function drawFace(context){
+          //the nose
+              context.beginPath();
+              context.moveTo(250,275);
+              context.lineTo(200,375);
+              context.lineTo(250,375);
+              context.stroke();
+
+              //the eyebrows
+              context.beginPath();
+              context.arc(190, 220, 40, 210 * Math.PI/180, 300 * Math.PI/180, false);
+              context.stroke();
+
+              context.beginPath();
+              context.arc(310, 220, 40, 240 * Math.PI/180, 330 * Math.PI/180, false);
+              context.stroke();
+
+              //the eyeballs
+              context.beginPath();
+              context.arc(190, 250, 40, 0, 2 * Math.PI, false);
+              context.stroke();
+              context.beginPath();
+              context.arc(310, 250, 40, 0, 2 * Math.PI, false);
+              context.stroke();
+
+              //the lower lip
+              context.moveTo(200, 400);
+              context.bezierCurveTo(225, 475, 275, 475, 300, 400);
+
+              //the upper lip
+              context.moveTo(200,400);
+              context.quadraticCurveTo(250, 450, 300, 400);
+              context.stroke();
+      }
+      function drawDraggedPaths(context) {
+          var i,j;
+          for (i=0;i<draggedPaths.length;i++){
+              var tempPath = draggedPaths[i];
+              if (!tempPath || !tempPath.length){
+                  continue;
+              }
+              context.beginPath();
+              context.moveTo(tempPath[0][0],tempPath[0][1]);
+              for (j=1;j<tempPath.length;j++){
+                  context.lineTo(tempPath[j][0],tempPath[j][1]);
+              }
+              context.stroke();
+          }
+      }
+      function pathAPICanvasDraw() {
+          var canvas = document.getElementById("pathAPICanvas");
+          var mouseX, mouseY;
+          var curX, curY;
+
+          if (canvas.getContext) {
+              var context = canvas.getContext("2d");
+              var w=canvas.width;
+              var h=canvas.height;
+              context.lineWidth=7;
+              context.strokeStyle = "blue";
+              drawFace(context);
+              
+
+              canvas.addEventListener('mousemove',pathAPICanvasMove,false);
+              canvas.addEventListener('mousedown',pathAPICanvasDown,false);
+              canvas.addEventListener('mouseup',pathAPICanvasUp,false);
+          }
+      }
+      function pathAPICanvasDown(e){
+          isMouseDown = true;
+          var tempPath = [];
+          draggedPaths.push(tempPath);
+      }
+      function pathAPICanvasUp(e){
+          isMouseDown = false;
+      }
+
+      function findOffset(obj) {
+          var canvas = document.getElementById("pathAPICanvas");
+          var curX, curY;
+          curX = curY = 0;
+          if (obj.offsetParent) {
+              do {
+                  curX += obj.offsetLeft;
+                  curY += obj.offsetTop;
+              } while (obj = obj.offsetParent);
+              return {x:curX,y:curY};
+          }
+      }
+
+      function pathAPICanvasMove(e){
+          var canvas = document.getElementById("pathAPICanvas");
+          var mouseX, mouseY;
+          if (canvas) {
+              var pos = findOffset(canvas);
+              mouseX = e.pageX - pos.x;
+              mouseY = e.pageY - pos.y;
+              
+
+              //get the context and draw to it IF the mouse is down
+              var context = canvas.getContext("2d");
+              context.clearRect (0,0,canvas.width, canvas.height);
+              drawFace(context);
+              drawDraggedPaths(context);
+
+              if (isMouseDown) {
+                  var tempPath = draggedPaths[draggedPaths.length-1];
+                  tempPath.push([mouseX, mouseY]);
+              }
+              
+          }
+      }
+  </script>
+  <slide>
+      <hgroup>
+  <h1>
+      Path API
+  </h1></hgroup>
+
+  <article class="smaller">
+
+      <div class="build fade">
+          <section><pre class="prettyprint" data-lang="javascript">
+            //the nose
+            context.beginPath();
+            context.moveTo(250,275);
+            context.lineTo(200,375);
+            context.lineTo(250,375);
+            context.stroke();
+
+            //the eyebrows
+            context.beginPath();
+            context.arc(190, 220, 40, 210 * Math.PI/180, 300 * Math.PI/180, false);
+            context.stroke();
+            context.beginPath();
+            context.arc(310, 220, 40, 240 * Math.PI/180, 330 * Math.PI/180, false);
+            context.stroke();
+
+            //the eyeballs
+            context.beginPath();
+            context.arc(190, 250, 40, 0, 2 * Math.PI, false);
+            context.stroke();
+            context.beginPath();
+            context.arc(310, 250, 40, 0, 2 * Math.PI, false);
+            context.stroke();
+
+            //the lower lip
+            context.moveTo(200, 400);
+            context.bezierCurveTo(225, 475, 275, 475, 300, 400);
+
+            //the upper lip
+            context.moveTo(200,400);
+            context.quadraticCurveTo(250, 450, 300, 400);
+            context.stroke();
+        </pre>
+          </section>
+          <!-- <img src="images/pathAPI.png" style="position: absolute; left: 60%; top: 30%; border-style:solid; border-width: 2px; border-color: rgb(0,0,0);"> -->
+          <canvas id="pathAPICanvas" width = "500px" height="500px" style="position: absolute; left: 40%; top: 10%; border-style:solid; border-width: 2px; border-color: rgb(0,0,0);" onclick="pathAPICanvasDraw();"></canvas>
+      </div>
+      <script type="application/javascript">
+          function pathAPICanvasInit() {
+              var canvas = document.getElementById("pathAPICanvas");
+              if (canvas.getContext) {
+                  var context = canvas.getContext("2d");
+                  context.font = "20pt Arial";
+                  context.fillText("Click me once, then drag inside", 0,20);
+              }
+          }
+          pathAPICanvasInit();
+      </script>
+  </article>
+  </slide>
+
+
+  <!-- Path API Geometric Queries-->
+<slide>
+    <hgroup><h1 class="title">
+      Path API Geometric Queries
+  </h1></hgroup>
+  <article>
+      <br>
+      <div style="text-align: center;"><img src="images/pathGeomFunctions.png" width="80%"></div>
+
+  </article>
+  </slide>
+
+  <!-- Layout and Transformations-->
+  <slide><hgroup><h1 class="title">
+      Layout and Transformations
+  </h1></hgroup>
+  <article>
+
+      <br>
+      <div style="text-align: center;"><img src ="images/layoutText.png" height="70%"></div>
+  </article>
+  </slide>
+
+  <!-- Image Editing-->
+<slide><hgroup>  <h1 class="title">
+      Image Editing
+  </h1></hgroup>
+  <article>
+      <pre class="build fade prettyprint" data-lang="javascript">
+<b>var imageData = context.getImageData(0,0,canvaswidth,canvasheight);
+var pixels = imageData.data;</b>
+<b>for (var i = 0, n = pixels.length; i < n; i += 4) {
+   pixels[i]   = //red
+   pixels[i+1] = //green
+   pixels[i+2] = //blue
+   pixels[i+3] = //alpha
+}</b>
+<b>context.putImageData(imageData, 0, 0);</b>
+
+      </pre>
+      <a href="demos/imageProcessing.html" target="_self">Link to a demo</a>
+  </article>
+  </slide>
+
+  <!-- Animation-->
+<slide><hgroup><h1 class="title">
+      Animation
+  </h1></hgroup>
+    <article>
+    <iframe width="600px" data-src="demos/blobsallad/iframedsallad.html"></iframe>
+
+  </article>
+  </slide>
+
+  <slide><hgroup><h1 class="title">
+      Optimizing Animation
+  </h1></hgroup>
+      <article>
+	  <div class="build">
+	  <p style="font-size: 150%">setInterval, setTimeout (DO NOT USE!)</p>
+	  <section>
+          <p style="font-size: 150%">requestAnimationFrame</p>
+          <ul>
+              <li>allow the browser to optimize canvas animation</li>
+          </ul>
+      <pre class="prettyprint" data-lang="javascript">
+function animateCanvas() {
+	window.requestAnimationFrame(animateCanvas);
+	drawCanvas();
+}
+      </pre>
+          (complete code at http://paulirish.com/2011/requestanimationframe-for-smart-animating/)
+		</section>
+		</div>
+      </article>
+  </slide>
+
+  <!-- Canvas SVG comparison -->
+  <!--<slide>
+      <hgroup><h1>Comparison with SVG</h1></hgroup>
+      <article>
+          <table>
+              <tr>
+                  <th></th><th>Canvas</th><th>SVG</th>
+              </tr>
+              <tr>
+                  <td>Rendering Mode</td><td>Immediate</td><td>Declarative</td>
+              </tr>
+              <tr>
+                  <td>Grouping</td><td>Not supported*</td><td>Supported</td>
+              </tr>
+              <tr>
+                  <td>Filter Effects</td><td>Not supported*</td><td>Supported</td>
+              </tr>
+          </table>
+          (* not supported <i>natively</i>)
+      </article>
+  </slide>
+  -->
+
+  <!-- Canvas Summary-->
+  <slide>
+      <article>
+          <p style="font-size: 150%">Questions?</p>
+          <!-- <pre class="prettyprint" data-lang="javascript">
+var imageData = context.getImageData(0,0,canvaswidth,canvasheight);
+var pixels = imageData.data;
+for (var i = 0, n = pixels.length; i < n; i += 4) {
+    pixels[i]   = //red
+    pixels[i+1] = //green
+    pixels[i+2] = //blue
+    pixels[i+3] = //alpha
+    }
+context.putImageData(imageData, 0, 0);
+      </pre> -->
+          <img src="images/canvasPaint.png" style="width: 40%; height: 40%; border-style:solid; border-width: 2px; border-color: rgb(0,0,0);">
+          <img src ="images/layoutText.png" height="70%">
+      </article>
+  </slide>
+
+  <!-- CSS Title Slide-->
+  <slide class="title-slide segue nobackground">
+      <aside class="sglogobar"><img src="images/siggraph2012-logo-with-alpha.png"></aside>
+      <!-- The content of this hgroup is replaced programmatically through the slide_config.json. -->
+      <hgroup>
+          <h1>Cascading Style Sheets <br> (CSS3)</h1>
+      </hgroup>
+  </slide>
+
+  <slide><hgroup>
+      <h1 class="title">
+          Cascading Style Sheets <br>
+      </h1></hgroup>
+      <article>
+          <img src="images/renderingPipeline.png" width="100%">
+  </article>
+  </slide>
+
+  <!-- Planes in Space-->
+  <slide><hgroup>
+      <h1 class="title">
+          Planes in Space
+      </h1></hgroup>
+      <article>
+          <div class="columns-2">
+              <pre class = "prettyprint" data-lang="html">
+&lt;html&gt;
+&lt;body&gt;
+&lt;div style="
+width: 500px; height: 500px;
+position: relative;
+<b>left:100; top: 25;</b>
+background-color:#CCCCFF"&gt;
+  Hello!
+&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+    </pre>
+              <img src="images/css_2d.png" width=100%>
+    </div>
+    </article>
+  </slide>
+
+  <slide><hgroup>
+      <h1 class="title">
+          Planes in Space (3D)
+      </h1></hgroup>
+      <article>
+          <div class="columns-2">
+              <pre class = "prettyprint" data-lang="html">
+&lt;html&gt;
+&lt;body&gt;
+&lt;div style="
+width: 500px; height: 500px;
+position: relative;
+left:100; top: 25;
+<b>-webkit-transform: rotateY(60deg) rotateZ(30deg);</b>
+background-color:#CCCCFF"&gt;
+  Hello!
+&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+    </pre>
+              <img src="images/css_3d.png" width=100%>
+          </div>
+      </article>
+  </slide>
+
+  <!-- Animation with transitions -->
+  <slide>
+      <hgroup><h1 class="title">
+          Animation  with Transitions
+      </h1></hgroup>
+      
+      <article>
+          <div class="build">
+          <div width=200px height=200px style="
+-webkit-transition: -webkit-transform 1s ease-in; background-color:#CCCCFF; position: relative; left: 20px; top: 20px; width:200px; height:200px;"
+               onclick="this.style.webkitTransform='rotate(180deg) rotateY(180deg)'">
+              <p style="font-size:40px">Hello!</p>
+          </div>
+
+      <pre class = "prettyprint" data-lang="html">
+&lt;<b>div style="-webkit-transition: -webkit-transform 1s ease-in;"
+onclick="this.style.webkitTransform='rotate(180deg) rotateY(180deg)'"&gt;</b>
+    &lt;p style="font-size:40px">Hello!&lt;/p&gt;
+&lt;/div&gt;
+    </pre>
+              <p> <a href="demos/3dtransforms/index.html" target="_self">Link to 3D Transforms </a></p>
+          </div>
+      </article>
+  </slide>
+
+  <!-- Animation with keyframes -->
+  <slide><hgroup>
+      <h1 class="title">
+          CSS Animation <br> (Keyframes)
+      </h1></hgroup>
+      <article>
+          <style type="text/css">
+              @-webkit-keyframes wobble {
+0% { -webkit-transform: scale3d(1,1,1) rotateZ(0deg);}
+33% {-webkit-transform: scale3d(1.2,1.2,1) rotateZ(30deg);}
+66% {-webkit-transform: scale3d(1.2,1.2,1) rotateZ(-30deg);}
+100% {-webkit-transform: scale3d(1,1,1) rotateZ(-deg);}
+}</style>
+          <div class="build">
+              <div style="
+background-color:#CCCCFF; position: relative; left: 20px; top: 20px; width:200px; height:200px;-webkit-animation-name: wobble;-webkit-animation-duration: 3s;-webkit-animation-iteration-count: infinite;-webkit-animation-direction: alternate;-webkit-animation-timing-function: linear;">
+                  <p style="font-size:40px">Hello!</p>
+              </div>
+              <pre class = "prettyprint" data-lang="css">
+ @-webkit-keyframes <b>wobble</b> {
+0% { -webkit-transform: scale3d(1,1,1) rotateZ(0deg);}
+33% {-webkit-transform: scale3d(1.2,1.2,1) rotateZ(30deg);}
+66% {-webkit-transform: scale3d(1.2,1.2,1) rotateZ(-30deg);}
+100% {-webkit-transform: scale3d(1,1,1) rotateZ(-deg);}}
+    </pre>
+              <pre class = "prettyprint" data-lang="html">
+&lt;div style="<b>-webkit-animation-name: wobble;</b>
+-webkit-animation-duration: 3s;
+-webkit-animation-iteration-count: infinite;
+-webkit-animation-direction: alternate;
+-webkit-animation-timing-function: linear;"&gt;
+    &lt;p style="font-size:40px">Hello!&lt;/p&gt;
+&lt;/div&gt;
+    </pre>
+          </div>
+      </article>
+  </slide>
+
+  <!-- Image Editing -->
+  <slide>
+      <hgroup> <h1>
+          Image Editing
+      </h1> </hgroup>
+  <article>
+      <!-- <iframe width="600px" src="demos/CSS_Filters.htm"></iframe> -->
+      <div class="columns-2">
+          <p></p>
+          <div class="build">
+              <p>SVG Filter Effects on <b>any</b> DOM element<br>
+                  e.g. “style=‘-webkit-filter: blur(2px) grayscale(1);’ ”</p>
+              <p><a href="demos/CSS_Filters.htm" target="_self">Link to Demo.</a></p>
+              <p>Simple (1-2 extra lines in element style)</p>
+              <p>Fast (natively supported, hardware accelerated)</p>
+          </div>
+      </div>
+      </article>
+  </slide>
+
+  <!-- CSS Shaders -->
+  <slide>
+      <hgroup> <h1>
+          CSS Shaders
+      </h1> </hgroup>
+      <article>
+          <p style="font-size: 150%">GLSL Shaders for <b>any</b> DOM element</p>
+          <div align="center">
+          <img src="images/cssShadersFlowchart.jpg">
+          <img src="images/cssShaderCurved.png">
+          <p>images &copy Adobe Systems<br>
+              (http://www.adobe.com/devnet/html5/articles/css-shaders.html)
+          </p>
+          </div>
+      </article>
+  </slide>
+
+  <!-- Canvas and CSS Demos -->
+  <slide>
+  <hgroup><h1>Demo, Take-Aways, and Questions</h1></hgroup>
+      <article>
+	  <div class="columns-2">
+	
+          <p style="font-size: 150%">Ninja Authoring Tool</p>
+		  
+		  <ul>
+		  <li>Open Source, BSD license
+		  <li>freely available on Chrome Store and Github
+		  </ul>
+          <div style="align: center; vertical-align: middle"><img src="images/ninja_icon_128.png"></div>
+			<div class="build">
+			<section>
+		  <p  style="font-size: 150%">Take-aways</p>
+  <ul>
+  <li>large "native-class" applications now possible on the web
+  <li>graphics applications <b>especially</b> suitable as web apps
+  </ul>
+  </section>
+  <p style="font-size: 200%">Questions?</p>
+  </div>
+</div>
+      </article>
+  </slide>
+
+  
+
+  <!-- Canvas SVG comparison -->
+  <slide>
+      <hgroup><h1>Comparison with SVG</h1></hgroup>
+      <article>
+          <table>
+              <tr>
+                  <th></th><th>Canvas</th><th>SVG</th>
+              </tr>
+              <tr>
+                  <td>Rendering Mode</td><td>Immediate</td><td>Declarative</td>
+              </tr>
+              <tr>
+                  <td>Grouping</td><td>Not supported*</td><td>Supported</td>
+              </tr>
+              <tr>
+                  <td>Filter Effects</td><td>Not supported*</td><td>Supported</td>
+              </tr>
+          </table>
+          (* not supported <i>natively</i>)
+      </article>
+  </slide>
+
+  <slide class="thank-you-slide segue nobackground">
+    <article class="flexbox vleft auto-fadein">
+      <h2>&lt;Thank You!&gt;</h2>
+    </article>
+    <p class="auto-fadein" data-config-contact>
+      <!-- populated from slide_config.json -->
+    </p>
+  </slide>
+
+  <slide class="fill nobackground" style="background-image: url(images/siggraph2012-title.jpg)">
+  </slide>
+
+  <slide class="backdrop"></slide>
+
+</slides>
+
+<script>
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-XXXXXXXX-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+
+<!--[if IE]>
+  <script src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
+  <script>CFInstall.check({mode: 'overlay'});</script>
+<![endif]-->
+</body>
+</html>

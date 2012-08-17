@@ -1,0 +1,138 @@
+
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  
+  <!-- disable zooming -->
+  <meta name="viewport" content="initial-scale=1.0; minimum-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+  
+  <title>Card Flip &middot; Intro to CSS 3D transforms &rsaquo; Docs</title>
+  
+    <link rel="stylesheet" href="../css/style.css" media="screen" />
+
+</head>
+<body class="doc">
+
+  <nav>
+  <h1><a href="../">Intro to CSS 3D transforms</a></h1>
+  <ul>
+    
+      <li><a href="../docs/introduction.html">Introduction</a></li>
+    
+      <li><a href="../docs/perspective.html">Perspective</a></li>
+    
+      <li><a href="../docs/3d-transform-functions.html">3d transform functions</a></li>
+    
+      <li class="current"><a href="../docs/card-flip.html">Card Flip</a></li>
+    
+      <li><a href="../docs/cube.html">Cube</a></li>
+    
+      <li><a href="../docs/rectangular-prism.html">Rectangular prism</a></li>
+    
+      <li><a href="../docs/carousel.html">Carousel</a></li>
+    
+      <li><a href="../docs/conclusion.html">Conclusion</a></li>
+    
+  </ul>
+</nav>
+
+  <section id="content">
+
+    <h1>Card Flip</h1>
+
+    <p>We now have all the tools to start making 3D objects. Let&#8217;s get started with the basics, flipping a card.</p>
+
+<p>Here&#8217;s the basic markup we&#8217;ll need:</p>
+<div class='highlight'><pre><code class='html'><span class='nt'>&lt;section</span> <span class='na'>class=</span><span class='s'>&quot;container&quot;</span><span class='nt'>&gt;</span>
+  <span class='nt'>&lt;div</span> <span class='na'>id=</span><span class='s'>&quot;card&quot;</span><span class='nt'>&gt;</span>
+    <span class='nt'>&lt;figure</span> <span class='na'>class=</span><span class='s'>&quot;front&quot;</span><span class='nt'>&gt;</span>1<span class='nt'>&lt;/figure&gt;</span>
+    <span class='nt'>&lt;figure</span> <span class='na'>class=</span><span class='s'>&quot;back&quot;</span><span class='nt'>&gt;</span>2<span class='nt'>&lt;/figure&gt;</span>
+  <span class='nt'>&lt;/div&gt;</span>
+<span class='nt'>&lt;/section&gt;</span>
+</code></pre>
+</div>
+<p>The <code>.container</code> will house the 3D space. The <code>#card</code> acts as a wrapper for the 3D object. Two separate elements for both faces of the card, <code>.front</code> and <code>.back</code>. Even for such a simple object, I recommend using this same pattern for any 3D transform. Keeping the 3D space element and the object separate element establishes a paradigm that is simple to understand and easier to style.</p>
+
+<p>We&#8217;re ready for some 3D stylin&#8217;. First, apply necessary <code>perspective</code> to the parent 3D space, along with any size or positioning styles.</p>
+<div class='highlight'><pre><code class='css'><span class='nc'>.container</span> <span class='p'>{</span> 
+  <span class='k'>width</span><span class='o'>:</span> <span class='m'>200px</span><span class='p'>;</span>
+  <span class='k'>height</span><span class='o'>:</span> <span class='m'>260px</span><span class='p'>;</span>
+  <span class='k'>position</span><span class='o'>:</span> <span class='k'>relative</span><span class='p'>;</span>
+  <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>perspective</span><span class='o'>:</span> <span class='m'>800</span><span class='p'>;</span>
+<span class='p'>}</span>
+</code></pre>
+</div>
+<p>Now the <code>#card</code> element can be transformed in its parent&#8217;s 3D space. We&#8217;re using absolute/relative positioning so the 3D object is removed from the flow of the document. We&#8217;ll also add @width: 100%;<code>  and </code>height: 100%;@. This ensures the object&#8217;s <code>transform-origin</code> will occur in the center of container. More on <code>transform-origin</code> later.</p>
+
+<p>Let&#8217;s add a CSS3 transition so users can see the transform take effect.</p>
+<div class='highlight'><pre><code class='css'><span class='nf'>#card</span> <span class='p'>{</span>
+  <span class='k'>width</span><span class='o'>:</span> <span class='m'>100%</span><span class='p'>;</span>
+  <span class='k'>height</span><span class='o'>:</span> <span class='m'>100%</span><span class='p'>;</span>
+  <span class='k'>position</span><span class='o'>:</span> <span class='k'>absolute</span><span class='p'>;</span>
+  <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>-</span><span class='n'>style</span><span class='o'>:</span> <span class='n'>preserve</span><span class='m'>-3</span><span class='err'>d</span><span class='p'>;</span>
+  <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transition</span><span class='o'>:</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span> <span class='m'>1</span><span class='err'>s</span><span class='p'>;</span>
+<span class='p'>}</span>
+</code></pre>
+</div>
+<p>The <code>.container</code>&#8217;s <code>perspective</code> only applies to direct descendant children, in this case <code>#card</code>. In order for subsequent children to inherit a parent&#8217;s perspective, and live in the same 3D space, the parent can pass along its perspective with <code>transform-style: preserve-3d</code>. Without 3D <code>transform-style</code>, the faces of the card would be flattened with its parents and the back face&#8217;s rotation would be nullified.</p>
+
+<p>To position the faces in 3D space, we&#8217;ll need to reset their positions in 2D with <code>position: absolute</code>. In order to hide the back-side of the faces when they are faced away from the viewer, we use <code>backface-visibility: hidden</code>.</p>
+<div class='highlight'><pre><code class='css'><span class='nf'>#card</span> <span class='nt'>figure</span> <span class='p'>{</span>
+  <span class='k'>display</span><span class='o'>:</span> <span class='k'>block</span><span class='p'>;</span>
+  <span class='k'>position</span><span class='o'>:</span> <span class='k'>absolute</span><span class='p'>;</span>
+  <span class='k'>width</span><span class='o'>:</span> <span class='m'>100%</span><span class='p'>;</span>
+  <span class='k'>height</span><span class='o'>:</span> <span class='m'>100%</span><span class='p'>;</span>
+  <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>backface</span><span class='o'>-</span><span class='k'>visibility</span><span class='o'>:</span> <span class='k'>hidden</span><span class='p'>;</span>
+<span class='p'>}</span>
+</code></pre>
+</div>
+<p>To flip the <code>.back</code> face, we add a basic 3D transform of <code>rotateY( 180deg )</code>.</p>
+<div class='highlight'><pre><code class='css'><span class='nf'>#card</span> <span class='nc'>.front</span> <span class='p'>{</span>
+  <span class='k'>background</span><span class='o'>:</span> <span class='nb'>red</span><span class='p'>;</span>
+<span class='p'>}</span>
+<span class='nf'>#card</span> <span class='nc'>.back</span> <span class='p'>{</span>
+  <span class='k'>background</span><span class='o'>:</span> <span class='nb'>blue</span><span class='p'>;</span>
+  <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateY</span><span class='p'>(</span> <span class='m'>180</span><span class='n'>deg</span> <span class='p'>);</span>
+<span class='p'>}</span>
+</code></pre>
+</div>
+<p>With the faces in place, the <code>#card</code> requires a corresponding style for when it is flipped.</p>
+<div class='highlight'><pre><code class='css'><span class='nf'>#card</span><span class='nc'>.flipped</span> <span class='p'>{</span>
+  <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateY</span><span class='p'>(</span> <span class='m'>180</span><span class='n'>deg</span> <span class='p'>);</span>
+<span class='p'>}</span>
+</code></pre>
+</div>
+<p>Now we have a working 3D object. To flip the card, we can toggle the <code>flipped</code> class. When <code>.flipped</code>, the <code>#card</code> will rotate 180 degrees, thus exposing the <code>.back</code> face.</p>
+
+<p><a href='../examples/card-01.html'><strong>See Example: Card 1</strong></a></p>
+
+<p><a href='../examples/card-01.html'><img src='../img/card-flip01.png' alt='3D card flip transition' /></a></p>
+
+<h2 id='slideflip'>Slide-flip</h2>
+
+<p>Take another look at the Weather App 3D transition. You&#8217;ll notice that it&#8217;s not quite the same effect as our <a href='../examples/card-01.html'>previous demo</a>. If you follow the right edge of the card, you&#8217;ll find that it stays flush with the container. Instead of pivoting from the horizontal center, it pivots on that right edge. But the transition is not just a rotation &#8211; the edge moves horizontally from right to left. We can reproduce this transition just by modifying a couple lines of CSS from our original card flip demo.</p>
+
+<p>The pivot point for the rotation occurs at the right side of the card. By default, the <code>transform-origin</code> of an element is at its horizontal and vertical center (<code>50% 50%</code> or <code>center center</code>). Let&#8217;s change it to the right side:</p>
+<div class='highlight'><pre><code class='css'><span class='nf'>#card</span> <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>-</span><span class='n'>origin</span><span class='o'>:</span> <span class='k'>right</span> <span class='k'>center</span><span class='p'>;</span> <span class='p'>}</span>
+</code></pre>
+</div>
+<p>That flip now needs some horizontal movement with <code>translateX</code>. We&#8217;ll set the rotation to <code>-180deg</code> so it flips right side out.</p>
+<div class='highlight'><pre><code class='css'><span class='nf'>#card</span><span class='nc'>.flipped</span> <span class='p'>{</span>
+  <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>translateX</span><span class='p'>(</span> <span class='m'>-100%</span> <span class='p'>)</span> <span class='n'>rotateY</span><span class='p'>(</span> <span class='m'>-180</span><span class='n'>deg</span> <span class='p'>);</span>
+<span class='p'>}</span>
+</code></pre>
+</div>
+<p><a href='../examples/card-02-slide-flip.html'><strong>See Example: Card 2</strong></a></p>
+
+<p><a href='../examples/card-02-slide-flip.html'><img src='../img/card-flip02.png' alt='3D card slide-flip transition' /></a></p>
+    
+  </section> <!-- #content -->
+  
+  <footer>
+    <p><a href="../../">Intro to CSS 3D transforms</a> by David DeSandro</p>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<!-- saved from url=(0060)http://html5-demos.appspot.com/static/css/filters/index.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+<title>CSS Filters</title>
+<link href="./CSS Filters_files/css" rel="stylesheet" type="text/css">
+<link href="./CSS Filters_files/common.css" rel="stylesheet" type="text/css">
+<style>
+article {
+  display: -webkit-flex;
+  -webkit-flex-direction: column;
+  -webkit-align-items: center;
+}
+article > section {
+  margin: 1em 0;
+}
+.cols {
+  -webkit-columns: 3;
+  width: 80%;
+}
+.cols > span {
+  display: inline-block;
+  width: 100%;
+}
+.cols > span > span {
+  width: 35%;
+  display: inline-block;
+  white-space: nowrap;
+}
+.cols > span > span:after {
+  content: '():';
+}
+hgroup {
+  text-align: center;
+  margin-bottom: 1em;
+}
+output {
+  display: block;
+  font-size: 14pt;
+  font-weight: 600;
+}
+@-webkit-keyframes sepia-anim {
+  from { -webkit-filter: sepia(0); }
+  to   { -webkit-filter: sepia(1); }
+}
+@-webkit-keyframes grayscale-anim {
+  from { -webkit-filter: grayscale(0); }
+  to   { -webkit-filter: grayscale(1); }
+}
+@-webkit-keyframes blur-anim {
+  from { -webkit-filter: blur(0); }
+  to   { -webkit-filter: blur(10px); }
+}
+@-webkit-keyframes spin {
+  from { -webkit-transform: rotateZ(0deg); }
+  to   { -webkit-transform: rotateZ(360deg); }
+}
+.sepia {
+  -webkit-animation: sepia-anim 2s ease-in-out;
+  -webkit-animation-direction: alternate;
+  -webkit-animation-iteration-count: infinite;
+}
+.grayscale {
+  -webkit-animation: grayscale-anim 2s ease-in-out;
+  -webkit-animation-direction: alternate;
+  -webkit-animation-iteration-count: infinite;
+}
+.blur {
+  -webkit-animation: blur-anim 0.5s linear;
+  -webkit-animation-direction: alternate;
+  -webkit-animation-iteration-count: infinite;
+}
+.spin {
+  -webkit-animation: spin 10s linear;
+  -webkit-animation-iteration-count: infinite;
+}
+/*.filter {
+  -webkit-filter: url(#myfilter);
+}*/
+article > section > div {
+  border-radius: 10px;
+}
+#pic {
+  height: 300px;
+  border-radius: 10px;
+  /* hw accel filters */
+  /*-webkit-transform: translateZ(0);*/
+}
+#chrome-logo {
+  height: 256px;
+  position: absolute;
+  bottom: -4em;
+  right: -4em;
+  opacity: 0.2;
+  -webkit-filter: grayscale(0.3) blur(8px);
+}
+.drop-shadow {
+  padding: 1em 1em 0.8em 1em;
+  -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset, 0 5px 10px #ccc;
+  -ms-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset, 0 5px 10px #ccc;
+  -o-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset, 0 5px 10px #ccc;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset, 0 5px 10px #ccc;
+}
+</style>
+</head>
+<body>
+
+<!-- CSS: filters, new flexbox, columns, linear/radial gradient, input[range], animations, rounded corners -->
+
+<details>
+  <summary>What's this?</summary>
+  <div>
+    <p>Demo showing CSS <a href="https://dvcs.w3.org/hg/FXTF/raw-file/tip/filters/index.html" target="_blank">Filter Effects 1.0</a>,
+    specifically the <a href="https://dvcs.w3.org/hg/FXTF/raw-file/tip/filters/index.html#FilterFunction" target="_blank">filter functions</a>,
+    which are being implemented in Webkit.</p>
+    <p>In Webkit, filters can be applied to hw accelerated content ( e.g. <code>img { -webkit-transform: translateZ(0); }</code> ).
+    In Chrome, filters on hw accelerated content are still a work in progress (use the <code>--enable-accelerated-filters</code> flag)
+    or enable the feature in <code>about:flags</code>.
+    This includes <code>&lt;video&gt;</code>, which is accelerated by default.</p>
+    <p><b>Support:</b> Chrome 18.0.976.0, Webkit nightly</p>
+  </div>
+</details>
+
+<!--
+<video src="http://www.html5rocks.com/en/tutorials/video/basics/chromeicon.mp4" controls></video>
+-->
+
+<hgroup>
+  <h2>CSS Filter Effects <br> (from http://html5-demos.appspot.com/static/css/filters/index.html)  </h2>
+</hgroup>
+
+<article>
+  <section>
+    <div class="drop-shadow">
+      <!-- <img id="pic" src="./CSS Filters_files/7670146250_ecbc9472d1_m.jpg" style="-webkit-filter: hue-rotate(30deg); "> -->
+        <img id="pic" src="./CSS Filters_files/krishna_kamal.png" style="-webkit-filter: hue-rotate(30deg); ">
+    </div>
+  </section>
+  <section>
+    <output>-webkit-filter: hue-rotate(30deg);</output>
+  </section>
+  <section class="cols">
+    <span><span>blur</span><input type="range" onchange="set(&#39;blur&#39;, this.value + &#39;px&#39;);" value="0" step="1" min="0" max="10"></span>
+    <span><span>grayscale</span><input type="range" onchange="set(&#39;grayscale&#39;, this.valueAsNumber);" value="0" step="0.1" min="0" max="1"></span>
+    <span><span>drop-shadow</span><input type="range" onchange="set(&#39;drop-shadow&#39;, this.value + &#39;px &#39; + this.value + &#39;px 20px black&#39;);" value="0" step="1" min="0" max="100"></span>
+    <span><span>sepia</span><input type="range" onchange="set(&#39;sepia&#39;, this.valueAsNumber);" value="0" step="0.1" min="0" max="1"></span>
+    <span><span>brightness</span><input type="range" onchange="set(&#39;brightness&#39;, this.valueAsNumber);" value="0" step="0.1" min="0" max="10"></span>
+    <span><span>contrast</span><input type="range" onchange="set(&#39;contrast&#39;, this.valueAsNumber);" value="0" step="0.1" min="0" max="10"></span>
+    <span><span>hue-rotate</span><input type="range" onchange="set(&#39;hue-rotate&#39;, this.value + &#39;deg&#39;);" value="0" step="30" min="0" max="360"></span>
+    <span><span>invert</span><input type="range" onchange="set(&#39;invert&#39;, this.valueAsNumber);" value="0" step="0.1" min="0" max="1"></span>
+    <span><span>saturate</span><input type="range" onchange="set(&#39;saturate&#39;, this.valueAsNumber);" value="0" step="0.1" min="0" max="10"></span>
+    <span><span>opacity</span><input type="range" onchange="set(&#39;opacity&#39;, this.valueAsNumber);" value="0" step="0.1" min="0" max="1"></span>
+    <span><button onclick="reset()" style="margin-top:10px;">reset</button></span>
+  </section>
+  <section>
+    Animations:
+    <button onclick="go(this, &#39;blur&#39;)">blur</button>
+    <button onclick="go(this, &#39;grayscale&#39;)">grayscale</button>
+    <button onclick="go(this, &#39;sepia&#39;)">sepia</button>
+    <button onclick="stop()">stop</button>
+  </section>
+</article>
+
+<img id="chrome-logo" src="./CSS Filters_files/chrome_logo_new_256.png">
+
+<!--
+<img style="-webkit-filter: custom(url('vertex-explode-detached.vs'), 2 2 detached)" src="chrome_logo-chrome.png">
+<img style="-webkit-filter: custom(url('vertex-offset.vs'), 5 10)" src="chrome_logo-chrome.png">
+
+<filter id="myfilter" filterUnits="userSpaceOnUse" x="0" y="0" width="200" height="120">
+  <desc>Produces a 3D lighting effect.</desc>
+  <feGaussianBlur in="SourceAlpha" stdDeviation="4" result="blur"/>
+  <feOffset in="blur" dx="4" dy="4" result="offsetBlur"/>
+  <feSpecularLighting in="blur" surfaceScale="5" specularConstant=".75" 
+                      specularExponent="20" lighting-color="#bbbbbb" 
+                      result="specOut">
+    <fePointLight x="-5000" y="-10000" z="20000"/>
+  </feSpecularLighting>
+  <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut"/>
+  <feComposite in="SourceGraphic" in2="specOut" operator="arithmetic" 
+               k1="0" k2="1" k3="1" k4="0" result="litPaint"/>
+  <feMerge>
+    <feMergeNode in="offsetBlur"/>
+    <feMergeNode in="litPaint"/>
+  </feMerge>
+</filter>
+-->
+
+<script type="text/javascript" async="" src="./CSS Filters_files/ga.js"></script><script>
+var FILTER_VALS = {};
+var el = document.querySelector('img');
+
+function go(me, className) {
+  var activeButton = document.querySelector('button.active');
+  if (activeButton) {
+    activeButton.classList.remove('active');
+    el.classList.remove(activeButton.textContent);
+  }
+
+  me.classList.add('active');
+  el.classList.toggle(className);
+}
+
+function stop() {
+  var activeButton = document.querySelector('button.active');
+  if (activeButton) {
+    activeButton.classList.remove('active');
+  }
+  el.className = '';
+}
+
+function reset() {
+  FILTER_VALS = {};
+  render();
+  document.querySelector('output').textContent = '-webkit-filter: none;';
+  el.className = '';
+
+  var ranges = document.querySelectorAll('input[type="range"]');
+  for (var i = 0, r; r = ranges[i]; i++) {
+    r.value = r.min;
+  }
+}
+
+function set(filter, value) {
+  FILTER_VALS[filter] = typeof value == 'number' ? Math.round(value * 10) / 10 : value;
+  if (value == 0 || (typeof value == 'string' && value.indexOf('0') == 0)) {
+    delete FILTER_VALS[filter];
+  }
+  render();
+}
+
+function render() {
+  var vals = [];
+  Object.keys(FILTER_VALS).sort().forEach(function(key, i) {
+    vals.push(key + '(' + FILTER_VALS[key] + ')');
+  });
+  var val = vals.join(' ');
+  el.style.webkitFilter = val;
+  document.querySelector('output').textContent = '-webkit-filter: ' + (val ? val : 'none') + ';';
+}
+
+function jsonFlickrFeed(feed) {
+  var items = feed.items;
+  //el.src = items[Math.floor(Math.random() * items.length)].media.m;
+  el.onload = function(e) {
+    this.parentElement.classList.add('drop-shadow');
+  }
+}
+
+window.addEventListener('keydown', function(e) {
+  if (e.keyCode == 27) { // ESC
+    document.querySelector('details').open = false;
+  }
+}, false);
+</script>
+<script>
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-22014378-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+<script src="./CSS Filters_files/photos_public.gne"></script>
+<!--[if IE]>
+<script src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
+<script>CFInstall.check({mode: 'overlay'});</script>
+<![endif]-->
+
+</body></html>

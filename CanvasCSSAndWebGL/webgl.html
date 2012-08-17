@@ -1,0 +1,1280 @@
+<!--
+Google IO 2012 HTML5 Slide Template
+
+Authors: Eric Bidelman <ebidel@gmail.com>
+         Luke Mahé <lukem@google.com>
+
+URL: https://code.google.com/p/io-2012-slides
+
+Slightly modified to create SIGGRAPH 2012 slide template
+
+Author:  Kenneth Russell <kbr@google.com>
+
+URL: https://github.com/kenrussell/siggraph2012course
+-->
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Title is populated with content in slide_config.js -->
+  <title>SIGGRAPH 2012</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <!--<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">-->
+  <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+  <!--This one seems to work all the time, but really small on ipad-->
+  <!--<meta name="viewport" content="initial-scale=0.4">-->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="stylesheet" media="all" href="theme/css/default.css">
+  <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="theme/css/phone.css">
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->
+  <script src="webgl_config.js"></script>
+  <script data-main="js/slides" src="js/require-1.0.8.min.js"></script>
+</head>
+<body style="opacity: 0">
+
+<slides class="layout-widescreen">
+
+  <slide class="fill nobackground" style="background-image: url(images/siggraph2012-title.jpg)">
+  </slide>
+
+  <slide class="title-slide segue nobackground">
+    <aside class="sglogobar"><img src="images/siggraph2012-logo-with-alpha.png"></aside>
+    <!-- The content of this hgroup is replaced programmatically through slide_config.js. -->
+    <hgroup class="auto-fadein">
+      <h1 data-config-title><!-- populated from slide_config.json --></h1>
+      <h2 data-config-subtitle><!-- populated from slide_config.json --></h2>
+      <p data-config-presenter><!-- populated from slide_config.json --></p>
+    </hgroup>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Introduction</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>WebGL brings 3D graphics to the HTML5 platform
+          <ul>
+            <li>Plugin free: never lose a user because they are afraid to download and install something from the web</li>
+            <li>Based on OpenGL ES 2.0: same for desktops, laptops, mobile devices, etc</li>
+            <li>Secure: ensure no out of bounds or uninitialized memory accesses</li>
+          </ul>
+        </li>
+        <li>WebGL is an alternative rendering context for the HTML5 Canvas element</li>
+        <li>WebGL = Javascript + Shaders
+          <ul>
+            <li>Shaders - small programs that execute on the GPU - determine position of each triangle and color of each pixel </li>
+          </ul>
+        </li>
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Security</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Validate all input parameters/data in WebGL
+          <ul>
+            <li>Never leak driver functionality that's not supported in the WebGL spec</li>
+            <li>Out-of-bounds data access detection</li>
+            <li>Initialize all allocated objects</li>
+          </ul>
+        </li>
+        <li>Deal with driver bugs
+          <ul>
+            <li>Work around where possible</li>
+            <li>Browsers actively maintain a blacklist</li>
+            <li>Work with driver vendors to fix bugs</li>
+            <li>Comprehensive conformance test suite</li>
+          </ul>
+        </li>
+        <li>Terminate long-running content (accidental or malicious)</li>
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Programming Model</h2>
+    </hgroup>
+    <article>
+      <p align="center"><img src="images/stream-processing-with-shaders.svg" height="200px" alt="Shader pipeline" title="Shader pipeline"></p>
+      <ul>
+        <li>The GPU is a stream processor</li>
+        <li>Vertex attributes: each point in 3D space has one or more streams of data associated with it
+          <ul>
+            <li>Position, surface normal, color, texture coordinate, ...</li>
+          </ul>
+        </li>
+        <li>These streams of data flow through the vertex and fragment shaders</li>
+        <li>Shaders are small, stateless programs which run on the GPU with a high degree of parallelism</li>
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Vertex Shader</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Vertex shader is applied to each vertex of each triangle</li>
+        <li>Its primary goal is to output the location where the vertex should appear in the on-screen window</li>
+        <li>May also output one or more additional values &mdash; <b>varying variables</b> &mdash; to the fragment shader</li>
+      </ul>
+      <img style="position:absolute; right:20px; bottom:50px;" src="images/vertex-and-fragment-shader-diagram.svg" height="180px" alt="Description" title="Description">
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Vertex Shader -> Fragment Shader</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>The outputs of vertex shader are the inputs of fragment shader, but not directly</li>
+        <li>For each triangle, the GPU figures out which pixels on the screen are covered by the triangle</li>
+        <li>At each pixel, GPU automatically blends outputs of the vertex shader based on where the pixel lies within the triangle</li>
+      </ul>
+      <img style="position:absolute; left:50px; bottom:180px;" src="images/stream-processing-with-shaders.svg" height="200px" alt="Shader pipeline" title="Shader pipeline">
+      <img style="position:absolute; left:330px; bottom:220px;" src="images/red_arrow.png" height="75px" alt="Arrow" title="Arrow">
+      <img style="position:absolute; right:20px; bottom:50px;" src="images/vertex-and-fragment-shader-diagram.svg" height="180px" alt="Description" title="Description">
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Fragment Shader</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>GPU then runs the fragment shader on each of those pixels</li>
+        <li>Fragment shader then determines the color of the pixel based on those inputs</li>
+      </ul>
+      <img style="position:absolute; right:20px; bottom:50px;" src="images/vertex-and-fragment-shader-diagram.svg" height="180px" alt="Description" title="Description">
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Getting Data on to the GPU</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Vertex data is uploaded in to one or more buffer objects</li>
+        <li>The vertex attributes in the vertex shader are bound to the data in these buffer objects</li>
+      </ul>
+      <p align="center"><img src="images/buffer-objects-and-vertex-shaders.svg" height="360px" alt="Description" title="Description"></p>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>A Concrete Example</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Adapted from Giles Thomas' <a href="http://learningwebgl.com/blog/?p=134">Learning WebGL Lesson 2</a></li>
+        <li>Code is checked in to the <a href="http://code.google.com/p/webglsamples/">webglsamples project</a> under hello-webgl/</li>
+        <li>May be <a href="http://webglsamples.googlecode.com/hg/hello-webgl/hello-webgl.html">viewed directly</a> in a WebGL-enabled browser
+        <li>Goal of this example is to de-mystify WebGL by showing all of the steps necessary to draw a colored triangle on the screen</li>
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>A Concrete Example</h2>
+    </hgroup>
+    <article>
+      <iframe data-src="hello-webgl.html"></iframe>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>The Big Picture</h2>
+    </hgroup>
+    <article>
+      <pre class="prettyprint" data-lang="html">
+&lt;html&gt;&lt;head&gt;
+&lt;title&gt;Hello, WebGL (adopted from Learning WebGL lesson 2)&lt;/title&gt;
+&lt;script id="shader-fs" type="x-shader/x-fragment"&gt;
+    ... // Vertex shader source code
+&lt;/script&gt;
+&lt;script id="shader-vs" type="x-shader/x-vertex"&gt;
+    ... // Fragment shader source code
+&lt;/script&gt;
+&lt;script type="text/javascript"&gt;
+    ... // WebGL source code 
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;body onload="webGLStart();"&gt;
+    &lt;canvas id="lesson02-canvas" style="border: none;" width="400" height="400"&gt;&lt;/canvas&gt; 
+&lt;/body&gt;
+&lt;/html&gt;
+      </pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Vertex Shader</h2>
+    </hgroup>
+    <article>
+      <pre class="prettyprint lang-glsl" data-lang="glsl">
+attribute vec3 positionAttr;
+attribute vec4 colorAttr;
+
+varying vec4 vColor;
+
+void main(void) {
+  gl_Position = vec4(positionAttr, 1.0);
+  vColor = colorAttr;
+}
+      </pre>
+      <ul>
+        <li>In this example, the vertex shader will only execute three times (for one triangle)</li>
+        <li>In a typical application, thousands or tens of thousands of triangles are usually drawn together</li>
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Fragment Shader</h2>
+    </hgroup>
+    <article>
+      <pre class="prettyprint lang-glsl" data-lang="glsl">
+precision mediump float;
+
+varying vec4 vColor;
+void main(void) {
+  gl_FragColor = vColor;
+}
+      </pre>
+      <ul>
+        <li>Value of vColor <b>varying variable</b> is a weighted combination of the colors specified at the three input vertices</li>
+        <li>Based on the location of the pixel within the triangle, GPU automatically blends colors that were specified at each vertex</li>
+        <li>Fragment shader executes between a dozen to tens of thousands of times, depending on how many pixels the triangle covers</li>
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Embedding Shaders</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Shaders in this example are embedded in the web page using script elements</li>
+        <li>It is entirely up to the application how to manage the sources for its shaders</li>
+        <li>Script tags were chosen to hold the shaders for this example for simplicity</li>
+        <li>Real world application might download shaders using XMLHttpRequest, generate shaders in JavaScript, etc.</li>
+      </ul>
+      <pre class="prettyprint" data-lang="html">
+&lt;script id="shader-vs" type="x-shader/x-vertex"&gt;
+  attribute vec3 positionAttr;
+  attribute vec4 colorAttr;
+  ...
+&lt;/script&gt;
+&lt;script id="shader-fs" type="x-shader/x-fragment"&gt;
+  precision mediump float;
+  varying vec4 vColor;
+  ...
+&lt;/script&gt;</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Initializing WebGL</h2>
+    </hgroup>
+    <article>
+      <pre class="prettyprint" data-lang="javascript">
+var gl = null;
+try {
+  gl = canvas.getContext("webgl");
+  if (!gl)
+    gl = canvas.getContext("experimental-webgl");
+} catch (e) {}
+if (!gl)
+  alert("Could not initialise WebGL, sorry :-(");</pre>
+      <ul>
+        <li>Not the best error detection logic; kept short for simplicity</li>
+        <li>Consult <a href="http://webglsamples.googlecode.com">WebGL samples</a> for better examples</li>
+        <li>Link to <a href="http://get.webgl.org/">http://get.webgl.org/</a> if initialization fails</li>
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Loading a Shader</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Create the shader object – vertex or fragment</li>
+        <li>Specify its source code</li>
+        <li>Compile it</li>
+        <li>Check whether compilation succeeded</li>
+        <li>Complete code follows; some error checking elided</li>
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Loading a Shader</h2>
+    </hgroup>
+    <article>
+      <pre class="prettyprint" data-lang="javascript">
+function getShader(gl, id) {
+  var script = document.getElementById(id);
+  var shader;
+  if (script.type == "x-shader/x-vertex") {
+    shader = gl.createShader(gl.VERTEX_SHADER);
+  } else if (script.type == "x-shader/x-fragment") {
+    shader = gl.createShader(gl.FRAGMENT_SHADER);
+  }
+  gl.shaderSource(shader, script.text);
+  gl.compileShader(shader);
+  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+    alert(gl.getShaderInfoLog(shader));
+    return null;
+  }
+
+  return shader;
+}</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Loading a Program</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>A program object combines the vertex and fragment shaders</li>
+        <li>Load each shader separately</li>
+        <li>Attach each to the program</li>
+        <li>Link the program</li>
+        <li>Check whether linking succeeded</li>
+        <li>Prepare vertex attributes for later assignment</li>
+        <li>Complete code follows</li>
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Loading a Program</h2>
+    </hgroup>
+    <article>
+      <pre class="prettyprint" data-lang="javascript">
+var program;
+function initShaders() {
+  var vertexShader = getShader(gl, "shader-vs");
+  var fragmentShader = getShader(gl, "shader-fs");
+  program = gl.createProgram();
+  gl.attachShader(program, vertexShader);
+  gl.attachShader(program, fragmentShader);
+  gl.linkProgram(program);
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS))
+    alert("Could not initialise shaders");
+  gl.useProgram(program);
+  program.positionAttr = gl.getAttribLocation(program, "positionAttr");
+  gl.enableVertexAttribArray(program.positionAttr);
+  program.colorAttr = gl.getAttribLocation(program, "colorAttr");
+  gl.enableVertexAttribArray(program.colorAttr);
+}</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Setting up Geometry</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Independent step from initialization of shaders and program; could just as easily be done before</li>
+        <li>Allocate buffer object on the GPU</li>
+        <li>Upload geometric data containing all vertex streams</li>
+        <li>Many options: interleaved vs. non-interleaved data, using multiple buffer objects, etc.</li>
+        <li>Generally, want to use as few buffer objects as possible; switching is expensive</li>
+        <li>Complete code follows</li>
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Setting up Geometry</h2>
+    </hgroup>
+    <article>
+      <pre class="prettyprint" data-lang="javascript">
+var buffer;
+function initGeometry() {
+  buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  // Interleave vertex positions and colors
+  var vertexData = [
+    // X    Y     Z         R     G     B     A
+    0.0,   0.8,  0.0,      1.0,  0.0,  0.0,  1.0,
+    // X    Y     Z         R     G     B     A
+    -0.8, -0.8,  0.0,      0.0,  1.0,  0.0,  1.0,
+    // X    Y     Z         R     G     B     A
+    0.8,  -0.8,  0.0,      0.0,  0.0,  1.0,  1.0
+  ];
+  gl.bufferData(gl.ARRAY_BUFFER,
+    new Float32Array(vertexData), gl.STATIC_DRAW);
+}</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Drawing the Scene</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Ready to draw the scene at this point</li>
+        <li>Clear the viewing area</li>
+        <li>Set up vertex attribute streams</li>
+        <li>Issue the draw call</li>
+        <li>Complete code follows</li>
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Drawing the Scene</h2>
+    </hgroup>
+    <article>
+      <pre class="prettyprint" data-lang="javascript">
+function drawScene() {
+  gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  // There are 7 floating-point values per vertex
+  var stride = 7 * Float32Array.BYTES_PER_ELEMENT;
+  // Set up position stream
+  gl.vertexAttribPointer(program.positionAttr,
+    3, gl.FLOAT, false, stride, 0);
+  // Set up color stream
+  gl.vertexAttribPointer(program.colorAttr,
+    4, gl.FLOAT, false, stride,
+    3 * Float32Array.BYTES_PER_ELEMENT);
+
+  gl.drawArrays(gl.TRIANGLES, 0, 3);
+}</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Using Textures</h2>
+    </hgroup>
+    <article>
+      <iframe data-src="hello-webgl-texture.html"></iframe>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Shaders Using a Texture</h2>
+    </hgroup>
+    <article>
+      <pre class="prettyprint lang-glsl" data-lang="vertex shader">
+attribute vec3 positionAttr;
+attribute vec2 texCoordAttr;
+varying vec2 texCoord;
+void main(void) {
+  gl_Position = vec4(positionAttr, 1.0);
+  texCoord = texCoordAttr;
+}
+      </pre>
+      <pre class="prettyprint lang-glsl" data-lang="fragment shader">
+precision mediump float;
+uniform sampler2D tex;
+varying vec2 texCoord;
+void main(void) {
+    gl_FragColor = texture2D(tex, texCoord);
+}
+      </pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Setting up Geometry with Texture Coords</h2>
+    </hgroup>
+    <article>
+      <pre class="prettyprint" data-lang="javascript">
+var buffer;
+function initGeometry() {
+  buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  // Interleave vertex positions and texture coordinates
+  var vertexData = [
+    // X    Y     Z         U     V
+    0.0,   0.8,  0.0,      0.5,  1.0,
+    // X    Y     Z         U     V
+    -0.8, -0.8,  0.0,      0.0,  0.0,
+    // X    Y     Z         U     V
+    0.8,  -0.8,  0.0,      1.0,  0.0,
+  ];
+  gl.bufferData(gl.ARRAY_BUFFER,
+    new Float32Array(vertexData), gl.STATIC_DRAW);
+}</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Setting up a Texture</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Create a texture object, and set up parameters</li>
+        <li>Download an image from web and wait</li>
+        <li>When an image is loaded, upload the image data to the texture</li>
+        <li>Draw with the texture</li>
+      </ul>   
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Setting up a Texture</h2>
+    </hgroup>
+    <article>
+      <pre class="prettyprint" data-lang="javascript">
+function loadTexture(src) {
+    var texture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+
+    var image = new Image();
+    image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+        drawScene();
+    };
+    image.src = src; // Start downloading the image by setting its source.
+    return texture;
+}
+      </pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Draw with a Texture</h2>
+    </hgroup>
+    <article>
+      <pre class="prettyprint" data-lang="javascript">
+function drawScene() {
+    ... // Same as hello-webgl example
+
+    // Bind the texture to texture unit 0
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    // Point the uniform sampler to texture unit 0
+    // NOTE: you should fetch this uniform location once and cache it
+    // Only written this way for simplicity
+    var textureLoc = gl.getUniformLocation(program, "tex");
+    gl.uniform1i(textureLoc, 0);
+
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+}
+      </pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>What Else?</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>WebGL specific: handling context lost and recovery</li>
+        <li>Regular graphics stuff:
+          <ul>
+            <li>Matrix: projection, transformation, ...</li>
+            <li>Lighting</li>
+            <li>Animation</li>
+            <li>Interaction</li>
+            <li>...</li>
+          </ul>
+        </li>
+      </ul>
+      <p align="center"><img src="images/aquarium.png" height="250px" alt="Aquarium" title="Aquarium"></p>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Higher-Level Libraries</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Now that we've dragged you through a complete example...</li>
+        <li>Many libraries already exist to make it easier to use WebGL</li>
+        <li>A few suggestions:
+          <ul>
+            <li><a href="https://github.com/mrdoob/three.js">Three.js</a> (used in the <a href="http://ro.me">Rome</a> demo, <a href="http://mrdoob.github.com/three.js/">mr. doob's demos</a>, and more)</li>
+            <li><a href="http://www.cubicvr.org/">CubicVR</a> (used in Mozilla's WebGL demos such as <a href="https://developer.mozilla.org/en-US/demos/detail/no-comply/launch">No Comply</a>)</li>
+            <li><a href="http://threedlibrary.googlecode.com">TDL</a> (used in the WebGL Aquarium and most of the other webglsamples demos)</li>
+            <li><a href="http://www.ambiera.com/copperlicht/">CopperLicht</a> (same developer as Irrlicht)</li>
+            <li><a href="http://www.senchalabs.org/philogl/">PhiloGL</a> (focus on data visualization)</li>
+            <li><a href="http://www.glge.org/">GLGE</a> (used for early prototypes of Google Body)</li>
+            <li><a href="http://www.scenejs.com/">SceneJS</a> (unique and interesting declarative syntax)</li>
+            <li><a href="http://spidergl.org/">SpiderGL</a> (lots of interesting visual effects)</li>
+          </ul>
+        </li>
+      </ul>
+    </article>
+  </slide>
+
+  <slide class="segue dark nobackground">
+    <aside class="sglogobar"><img src="images/siggraph2012-logo-with-alpha.png"></aside>
+    <hgroup class="auto-fadein">
+      <h2>Break</h2>
+    </hgroup>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Achieving High Performance</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>"Big rule" associated with OpenGL programs:
+          <ul>
+            <li>Reduce the number of draw calls per frame
+              <ul>
+                <li>OpenGL's efficiency comes from sending large amounts of geometry to the GPU with very little overhead</li>
+                <li>Sending down small batches &mdash; or worse, one or two triangles per draw call &mdash; does not give the GPU opportunity to optimize</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li>In order to draw many triangles at ones, it's usually necessary to sort objects in the scene by rendering state
+          <ul>
+            <li>For example, draw all objects using the same texture at once
+          </ul>
+        </li>
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>State Sorting</h2>
+    </hgroup>
+    <article>
+      <img style="float: right;" src="images/relative-cost-of-operations.svg" width="450px" alt="Description" title="Description">
+      <ul>
+        <li>Objects should be sorted and drawn according to the following criteria, in decreasing order of importance:
+          <ul>
+            <li>Target framebuffer or context state
+              <ul>
+                <li>Blending, clipping, depth test, etc.</li>
+              </ul>
+            </li>
+            <li>Program, buffer, or texture
+              <ul>
+                <li>Switching these often requires a pipeline flush</li>
+              </ul>
+            </li>
+            <li>Uniforms and samplers
+              <ul>
+                <li>Switching these is relatively cheap, modulo JavaScript overhead</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <footer class="source">source: Ben Vanik, Google</footer>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>State Sorting</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>If possible, sort scene ahead of time, maintain as a sorted list
+        <li>Walking the object hierarchy and re-sorting each frame can cancel gains from batching
+        <li>Generate content (models, etc.) so that they can be easily batched
+          <ul>
+            <li>Merge buffers
+            <li>Use texture atlases
+            <li>...
+          </ul>
+        </li>
+      </ul>
+      <footer class="source">source: Ben Vanik, Google</footer>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Example Structure of Drawing a Frame</h2>
+    </hgroup>
+    <article>
+      <pre class="prettyprint" data-lang="javascript">
+gl.enable(gl.DEPTH_TEST);
+gl.depthMask(true);
+gl.disable(gl.BLEND);
+// Draw opaque content
+gl.depthMask(false);
+gl.enable(gl.BLEND);
+// Draw translucent content
+gl.disable(gl.DEPTH_TEST);
+// Draw UI</pre>
+      <img class="centered" src="images/frame-structure.svg" height="175px" alt="Description" title="Description">
+      <footer class="source">source: Ben Vanik, Google</footer>
+    </article>
+  </slide>
+
+
+  <slide>
+    <hgroup>
+      <h2>JavaScript Performance</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>JavaScript performance has improved dramatically over the past several years
+        <li>In particular, for 3D graphics use cases
+        <li>Already possible to generate many vertices from JavaScript every frame and send them to the graphics card
+          <ul>
+            <li><a href="https://www.khronos.org/registry/webgl/sdk/demos/google/nvidia-vertex-buffer-object/index.html">NVIDIA vertex buffer object demo</a> generates and uploads ~10 million vertices per second
+          </ul>
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>WebGL Performance</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Still, in WebGL, all of the OpenGL "big rules" apply, along with another one:
+          <ul>
+            <li>Offload as much JavaScript to the GPU as possible, within reason</li>
+          </ul>
+        </li>
+        <li>Often, the GPU can be used to rephrase a computation that would otherwise need to be done on the CPU</li>
+        <li>Doing so can achieve not only better parallelism but also better performance</li>
+        <li>The following examples show how this rule was applied in some real-world scenarios</li>
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Picking in Google Body</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Google Body is a browser for the human anatomy</li>
+        <li>Originally developed at Google Labs, it is now available
+          as <a href="http://www.zygotebody.com/">Zygote Body</a>, from
+          the company which developed the 3D models</li>
+        <li>Models in application are highly detailed &mdash; over a million triangles &mdash; yet selection is very fast</li>
+        <li>Click any body part to highlight it and see its name</li>
+      </ul>
+      <footer class="source">source: Google Body team</footer>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Picking in Google Body</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>How to implement picking?</li>
+        <li>Could consider doing ray-casting in JavaScript
+          <ul>
+            <li>Attempt to do quick discards if ray doesn't intersect bounding box</li>
+          </ul>
+        <li>Still a lot of math to do in JavaScript</li>
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Picking in Google Body</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Instead, Google Body uses the GPU to implement picking</li>
+        <li>When model is loaded, assign different color to each organ</li>
+        <li>Upon mouse click:
+          <ul>
+            <li>Render body offscreen with different set of shaders</li>
+            <li>Use threshold to determine whether to draw translucent layers</li>
+            <li>Read back color of pixel under mouse pointer</li>
+          </ul>
+        </li>
+        <li>Same technique works at different levels of granularity
+          <ul>
+            <li>Each triangle, rather than each object, could be assigned a different color to achieve finer detail when picking
+          </ul>
+        </li>
+      </ul>
+      <footer class="source">source: Google Body team</footer>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Picking in Google Body</h2>
+    </hgroup>
+    <article class="flexbox vcenter">
+      <img src="images/body-selection.png" height="550px" alt="Description" title="Description">
+      <footer class="source">source: Google Body team</footer>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Picking in Google Body</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Note that this technique uses the GPU for what it's best at: rendering</li>
+        <li>Essentially converts problem of picking into one of rendering</li>
+        <li>Despite readback from GPU to CPU at end of algorithm, performance gains are worth it</li>
+      </ul>
+      <footer class="source">source: Google Body team</footer>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Particle Systems</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Particle systems are a technique commonly used to draw graphical effects like explosions, smoke, clouds, and dust</li>
+        <li>Most obvious way to implement a particle system:
+          <ul>
+            <li>Compute positions of particles on the CPU</li>
+            <li>Upload the vertices to the GPU</li>
+            <li>Draw them in a single draw call</li>
+          </ul>
+        </li>
+        <li>This technique can work for small particle systems, but does not scale well because many vertices are uploaded to the GPU each frame</li>
+        <li>Additionally, mathematical operations are not yet as fast in JavaScript as they are in C or C++</li>
+        <li>A different technique is desired</li>
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Particle Systems</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li><a href="http://games.greggman.com/game/">Gregg Tavares</a> has developed a <a href="https://cvs.khronos.org/svn/repos/registry/trunk/public/webgl/sdk/demos/google/particles/index.html">particle system demonstration</a> in the <a href="http://www.khronos.org/webgl/wiki/Demo_Repository">WebGL Demo Repository</a></li>
+        <li>Animates roughly 2000 particles at 60 frames per second</li>
+        <li>Does all animation math on the GPU</li>
+      </ul>
+      <img class="centered" height="350px" src="images/particles.png" alt="Description" title="Description">
+      <footer class="source">source: Gregg Tavares, Google</footer>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Particle Systems</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Each particle's motion is defined by an equation
+          <ul>
+            <li>Initial position, velocity, acceleration, spin, lifetime</li>
+          </ul>
+        </li>
+        <li>Set up motion parameters when particle is created</li>
+        <li>Send down one parameter &mdash; time &mdash; each frame</li>
+        <li>Vertex shader evaluates equation of motion, moves particle</li>
+        <li>Absolute minimum amount of JavaScript work done per frame</li>
+      </ul>
+      <footer class="source">source: Gregg Tavares, Google</footer>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Particle Systems</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li><a href="http://blog.nihilogic.dk/">Jacob Seidelin's</a> <a href="http://www.nihilogic.dk/labs/worlds_of_webgl/">Worlds of WebGL</a> demo shows a similar particle system technique</li>
+        <li>Particles assemble to form various shapes, falling to the floor between scenes, animating smoothly between them</li>
+        <li>Animation is done similarly to Gregg Tavares’ particle system</li>
+        <li>For each scene, random positions for the particles are chosen at setup time</li>
+        <li>Time parameter interpolates between two vertex attribute streams at any given time
+          <ul>
+            <li>One stream contains the particle positions on the floor</li>
+            <li>The other contains the particle positions for the current shape</li>
+          </ul>
+        </li>
+        <li>Once the current shape has been assembled, next interpolation target becomes the particles on the floor again</li>
+        <li>JavaScript does almost no computation</li>
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Sprite Engines</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>In early 2011, Facebook released <a href="https://github.com/facebook/jsgamebench/">JSGameBench</a> sprite engine benchmark
+          <ul>
+            <li>"Sprites" terminology more commonly used when authoring certain kinds of 2D games; similar to particle system
+          </ul>
+        <li>Compared various techniques for rendering animated sprites within a web browser
+          <ul>
+            <li>CSS-transformed Images
+            <li>2D Canvas
+            <li>WebGL
+          </ul>
+        <li>JSGameBench doesn’t appear to be under active development any more, but some lessons can be learned about its structure and performance characteristics
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Sprite Engines</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>At the time JSGameBench was released, several inefficiencies were identified in its WebGL backend
+          <ul>
+            <li>Did one draw call per sprite
+            <li>Set three uniform variables per sprite, including position
+            <li>On average, bound one texture per sprite
+          </ul>
+        <li>Seemed that drawing the entire sprite field with one draw call would be a big performance win
+        <li>Built <a href="http://webglsamples.googlecode.com/hg/sprites/index.html">prototype sprite engine</a> to test this hypothesis
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Alpha Blending and Draw Order</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Might seem impossible, because sprites require alpha blending and must be drawn in a particular order
+        <li>Little known fact: OpenGL's DrawArrays and DrawElements guarantee triangles are drawn in order
+          <ul>
+            <li>Apparently GPUs contain quite a bit of silicon in the Render Output Unit (ROP) to provide this guarantee
+            <li>Thanks to Nat Duca of Google for this information
+          </ul>
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Batching Sprites</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Only major remaining problem is avoiding the per-sprite texture bind
+        <li>Basic idea is to send all sprite sheets for the entire sprite field to the fragment shader, and have it choose which one to display for any given sprite
+        <li>Slight generalization of texture atlasing
+        <li>More on this later
+      </ul>
+      <img class="centered" src="images/sprite-sheets.png" height="350px" alt="Description" title="Description">
+      <footer class="source">Sprites Copyright 2011<br>Facebook</footer>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Sprite Animation</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Vertex shader does three major operations
+          <ul>
+            <li>Selects the animation frame for the sprite from the sprite sheet
+            <li>Computes texture coordinates for the corner of the sprite
+            <li>Transforms the corner of the sprite according to its position and rotation
+            <li>(In JSGameBench the rotation is constant, so it is in this prototype as well)
+          </ul>
+        <li>Majority of the information needed to do these computations is constant per sprite
+        <li>Computed and uploaded to the graphics card once, upon sprite creation
+      </ul>
+    </article>
+  </slide>
+
+<!-- Seems like too much detail -->
+<!--
+  <slide>
+    <hgroup>
+      <h2>Per-Sprite Constant Information</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Constant information is transmitted to vertex shader in several vertex attributes:
+          <ul>
+            <li>Rotation
+            <li>Per-sprite frame offset; allows each sprite instance to start its animation at a different time
+            <li>Sprite size in pixels (assumes square sprites; could easily be generalized)
+            <li>The number of sprites per row in the sprite sheet
+            <li>The total number of frames in the sprite's animation
+            <li>A vector of coefficients used to select the sprite sheet to use; one component is 1.0, all others 0.0
+            <li>...
+          </ul>
+      </ul>
+    </article>
+  </slide>
+-->
+
+  <slide>
+    <hgroup>
+      <h2>Sprite Transformation and Animation</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Position of each sprite is computed in JavaScript and uploaded to the graphics card each frame as another vertex attribute
+        <li>Technically possible to do this work in the vertex shader as well
+        <li>Doing it on the CPU more closely matches the structure of the JSGameBench code
+        <li>Also makes it simpler to handle wrapping at the edges of the screen
+        <li>"Global" frame offset is computed on the CPU each frame and sent to the shader program in a uniform variable
+        <li>Vertex shader does simple arithmetic to choose the frame of the current sprite's animation
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Choosing a Sprite Sheet</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Fragment shader is extremely simple; it just samples the sprite sheet at the given texture coordinates
+        <li>Remember that in order to batch all the sprites into a single draw call, we actually have to feed in multiple sprite sheets (textures)
+          <ul>
+            <li>Some of the sprites' animations are so large that they take up an entire 2048x2048 texture
+          </ul>
+        <li>How to choose which sprite sheet to sample?
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Fragment Shader Indexing Expressions</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Conceptually, we would like to send down a uniform array of samplers
+          <ul>
+            <li><code>uniform sampler2D textures[4];</code>
+          </ul>
+        <li>Compute an index into this array
+        <li>OpenGL ES 2.0 shading language, and therefore WebGL, doesn't allow this kind of indexing operation in a fragment shader
+        <li>Only kind of indexing expression allowed is one involving constants and loop indices
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>First Fragment Shader Attempt</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>First attempt at texture selection fragment shader:
+      </ul>
+      <pre class="prettyprint lang-glsl" data-lang="glsl">
+gl_FragColor =
+    (texture2D(u_texture0, v_texCoord) * v_textureWeights.x +
+     texture2D(u_texture1, v_texCoord) * v_textureWeights.y +
+     texture2D(u_texture2, v_texCoord) * v_textureWeights.z +
+     texture2D(u_texture3, v_texCoord) * v_textureWeights.w);</pre>   
+      <ul>
+        <li>This worked, but unfortunately was <b>slower</b> than JSGameBench at the time
+          <ul>
+            <li>About 66% of the performance
+          </ul>
+        <li>Why?
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Diagnosing Texture Bandwidth Saturation</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Experimented with taking out the "explosion" sprite
+        <li>Largest of all of the sprites
+          <ul>
+            <li>256x256, filling a 2048x2048 texture completely
+          </ul>
+        <li>Selected sprites from remaining three sprite sheets
+        <li>Significantly faster
+        <li>Indicates texture bandwidth is saturated on the GPU
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Alternative Formulation</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Talked with Nat Duca from Google
+        <li>He suggested to use a series of if-tests in the fragment shader
+        <li>My own experience had been that eliminating if-tests in shaders was always faster
+        <li>Nat indicated that if the branch will go the same way across large regions, it will work well
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Revised Fragment Shader</h2>
+    </hgroup>
+    <article>
+      <pre class="prettyprint lang-glsl" data-lang="glsl">
+  vec4 color;
+  if (v_textureWeights.x > 0.0)
+    color = texture2D(u_texture0, v_texCoord);
+  else if (v_textureWeights.y > 0.0)
+    color = texture2D(u_texture1, v_texCoord);
+  else if (v_textureWeights.z > 0.0)
+    color = texture2D(u_texture2, v_texCoord);
+  else // v_textureWeights.w > 0.0
+    color = texture2D(u_texture3, v_texCoord);
+  gl_FragColor = color;</pre>
+      <ul>
+        <li>Compare performance <a href="http://webglsamples.googlecode.com/hg/sprites/index.html?slow=true">before</a> and <a href="http://webglsamples.googlecode.com/hg/sprites/index.html">after</a>
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Measurements</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Measurements on laptop where prototype was developed indicate that it could draw 250% or more sprites at 30 FPS than JSGameBench's WebGL backend at the time
+        <li>JSGameBench subsequently added batching to their WebGL backend
+        <li>Full source code for <a href="http://webglsamples.googlecode.com/hg/sprites/index.html">prototype</a> is available in <a href="http://webglsamples.googlecode.com/">webglsamples project</a> under <code>sprites/</code>; see also <a href="http://webglsamples.googlecode.com/hg/sprites/readme.html">documentation</a>
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Physical Simulation</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>WebGL supports floating-point textures as an extension
+        <li>Every texel can store one or more floating-point values
+        <li>Because GPU can operate on so much floating-point data at once, it is possible to perform advanced techniques in WebGL such as physical simulation
+        <li>Any iterative computation where each step relies only on nearby neighbors is a good candidate for moving to the GPU
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Physical Simulation</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Evgeny Demidov has developed several <a href="http://www.ibiblio.org/e-notes/webgl/gpu/contents.htm">demonstrations</a> showing how to simulate waves, interference patterns, 2D fluid dynamics and other techniques in WebGL
+        <li>Evan Wallace has developed <a href="http://madebyevan.com/">demonstrations</a> utilizing floating-point textures to simulate <a href="http://madebyevan.com/webgl-water/">interactive water in a pool</a> and even do <a href="http://madebyevan.com/webgl-path-tracing/">path tracing</a> in WebGL
+        <li>Ricardo Cabello (mr.doob of Three.js) has developed a beautiful new <a href="http://mrdoob.com/144/Magic_dust">stateful particle simulation</a> using floating-point textures to represent the particles' states
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Conclusion</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>WebGL is an evolving specification and ecosystem
+        <li>We look forward to your participation in the community!
+        <li><a href="http://www.khronos.org/webgl/">WebGL landing page at the Khronos Group</a>
+        <li><a href="http://www.khronos.org/webgl/wiki">WebGL wiki</a>
+        <li><a href="http://www.khronos.org/registry/webgl/specs/latest/">WebGL specification (editor’s draft)</a>
+        <li><a href="http://groups.google.com/group/webgl-dev-list">WebGL developers’ mailing list (for discussing the use of WebGL)</a>
+        <li><a href="http://www.khronos.org/webgl/public-mailing-list/">WebGL public mailing list (for discussing the specification)</a>
+      </ul>
+    </article>
+  </slide>
+
+  <slide class="segue dark nobackground">
+    <aside class="sglogobar"><img src="images/siggraph2012-logo-with-alpha.png"></aside>
+    <hgroup class="auto-fadein">
+      <h2>Q&A</h2>
+    </hgroup>
+  </slide>
+
+  <slide class="thank-you-slide segue nobackground">
+    <article class="flexbox vleft auto-fadein">
+      <h2>&lt;Thank You!&gt;</h2>
+    </article>
+    <p class="auto-fadein" data-config-contact>
+      <!-- populated from slide_config.json -->
+    </p>
+  </slide>
+
+  <slide class="fill nobackground" style="background-image: url(images/siggraph2012-title.jpg)">
+  </slide>
+
+  <slide class="backdrop"></slide>
+
+</slides>
+
+<script>
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-XXXXXXXX-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+
+<!--[if IE]>
+  <script src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
+  <script>CFInstall.check({mode: 'overlay'});</script>
+<![endif]-->
+</body>
+</html>

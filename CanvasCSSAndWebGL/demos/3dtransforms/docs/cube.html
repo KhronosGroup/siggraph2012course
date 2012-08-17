@@ -1,0 +1,154 @@
+
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  
+  <!-- disable zooming -->
+  <meta name="viewport" content="initial-scale=1.0; minimum-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+  
+  <title>Cube &middot; Intro to CSS 3D transforms &rsaquo; Docs</title>
+  
+    <link rel="stylesheet" href="../css/style.css" media="screen" />
+
+</head>
+<body class="doc">
+
+  <nav>
+  <h1><a href="../">Intro to CSS 3D transforms</a></h1>
+  <ul>
+    
+      <li><a href="../docs/introduction.html">Introduction</a></li>
+    
+      <li><a href="../docs/perspective.html">Perspective</a></li>
+    
+      <li><a href="../docs/3d-transform-functions.html">3d transform functions</a></li>
+    
+      <li><a href="../docs/card-flip.html">Card Flip</a></li>
+    
+      <li class="current"><a href="../docs/cube.html">Cube</a></li>
+    
+      <li><a href="../docs/rectangular-prism.html">Rectangular prism</a></li>
+    
+      <li><a href="../docs/carousel.html">Carousel</a></li>
+    
+      <li><a href="../docs/conclusion.html">Conclusion</a></li>
+    
+  </ul>
+</nav>
+
+  <section id="content">
+
+    <h1>Cube</h1>
+
+    <p>Creating 3D card objects is a good way to get started with 3D transform. But once you&#8217;ve mastered them, you&#8217;ll be hungry to push it further and create some true 3D objects: prisms. We&#8217;ll start out by making a cube.</p>
+
+<p>The markup for the cube is similar to the card. This time we need 6 child elements for all 6 faces of the cube.</p>
+<div class='highlight'><pre><code class='html'><span class='nt'>&lt;section</span> <span class='na'>class=</span><span class='s'>&quot;container&quot;</span><span class='nt'>&gt;</span>
+  <span class='nt'>&lt;div</span> <span class='na'>id=</span><span class='s'>&quot;cube&quot;</span><span class='nt'>&gt;</span>
+    <span class='nt'>&lt;figure</span> <span class='na'>class=</span><span class='s'>&quot;front&quot;</span><span class='nt'>&gt;</span>1<span class='nt'>&lt;/figure&gt;</span>
+    <span class='nt'>&lt;figure</span> <span class='na'>class=</span><span class='s'>&quot;back&quot;</span><span class='nt'>&gt;</span>2<span class='nt'>&lt;/figure&gt;</span>
+    <span class='nt'>&lt;figure</span> <span class='na'>class=</span><span class='s'>&quot;right&quot;</span><span class='nt'>&gt;</span>3<span class='nt'>&lt;/figure&gt;</span>
+    <span class='nt'>&lt;figure</span> <span class='na'>class=</span><span class='s'>&quot;left&quot;</span><span class='nt'>&gt;</span>4<span class='nt'>&lt;/figure&gt;</span>
+    <span class='nt'>&lt;figure</span> <span class='na'>class=</span><span class='s'>&quot;top&quot;</span><span class='nt'>&gt;</span>5<span class='nt'>&lt;/figure&gt;</span>
+    <span class='nt'>&lt;figure</span> <span class='na'>class=</span><span class='s'>&quot;bottom&quot;</span><span class='nt'>&gt;</span>6<span class='nt'>&lt;/figure&gt;</span>
+  <span class='nt'>&lt;/div&gt;</span>
+<span class='nt'>&lt;/section&gt;</span>
+</code></pre>
+</div>
+<p>Basic position and size styles set the 6 faces on top of one another in the container.</p>
+<div class='highlight'><pre><code class='css'><span class='nc'>.container</span> <span class='p'>{</span>
+  <span class='k'>width</span><span class='o'>:</span> <span class='m'>200px</span><span class='p'>;</span>
+  <span class='k'>height</span><span class='o'>:</span> <span class='m'>200px</span><span class='p'>;</span>
+  <span class='k'>position</span><span class='o'>:</span> <span class='k'>relative</span><span class='p'>;</span>
+  <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>perspective</span><span class='o'>:</span> <span class='m'>1000</span><span class='p'>;</span>
+<span class='p'>}</span>
+
+<span class='nf'>#cube</span> <span class='p'>{</span>
+  <span class='k'>width</span><span class='o'>:</span> <span class='m'>100%</span><span class='p'>;</span>
+  <span class='k'>height</span><span class='o'>:</span> <span class='m'>100%</span><span class='p'>;</span>
+  <span class='k'>position</span><span class='o'>:</span> <span class='k'>absolute</span><span class='p'>;</span>
+  <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>-</span><span class='n'>style</span><span class='o'>:</span> <span class='n'>preserve</span><span class='m'>-3</span><span class='err'>d</span><span class='p'>;</span>
+<span class='p'>}</span>
+
+<span class='nf'>#cube</span> <span class='nt'>figure</span> <span class='p'>{</span>
+  <span class='k'>width</span><span class='o'>:</span> <span class='m'>196px</span><span class='p'>;</span>
+  <span class='k'>height</span><span class='o'>:</span> <span class='m'>196px</span><span class='p'>;</span>
+  <span class='k'>display</span><span class='o'>:</span> <span class='k'>block</span><span class='p'>;</span>
+  <span class='k'>position</span><span class='o'>:</span> <span class='k'>absolute</span><span class='p'>;</span>
+  <span class='k'>border</span><span class='o'>:</span> <span class='m'>2px</span> <span class='k'>solid</span> <span class='nb'>black</span><span class='p'>;</span>
+<span class='p'>}</span>
+</code></pre>
+</div>
+<p>With the card, we only had to rotate its back face. The cube, however, requires that 5 of the 6 faces to be rotated. Faces 1 and 2 will be the front and back. Faces 3 and 4 will be the sides. Faces 5 and 6 will be the top and bottom.</p>
+<div class='highlight'><pre><code class='css'><span class='nf'>#cube</span> <span class='nc'>.front</span>  <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateY</span><span class='p'>(</span>   <span class='m'>0</span><span class='n'>deg</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#cube</span> <span class='nc'>.back</span>   <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateX</span><span class='p'>(</span> <span class='m'>180</span><span class='n'>deg</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#cube</span> <span class='nc'>.right</span>  <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateY</span><span class='p'>(</span>  <span class='m'>90</span><span class='n'>deg</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#cube</span> <span class='nc'>.left</span>   <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateY</span><span class='p'>(</span> <span class='m'>-90</span><span class='n'>deg</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#cube</span> <span class='nc'>.top</span>    <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateX</span><span class='p'>(</span>  <span class='m'>90</span><span class='n'>deg</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#cube</span> <span class='nc'>.bottom</span> <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateX</span><span class='p'>(</span> <span class='m'>-90</span><span class='n'>deg</span> <span class='p'>);</span> <span class='p'>}</span>
+</code></pre>
+</div>
+<p>We could remove the <code>#cube .front</code> style declaration, as this transform has no effect, but let&#8217;s leave it in to keep our code consistent.</p>
+
+<p>Now each face is rotated, and only the front face is visible. The 4 side faces are all perpendicular to the viewer, so they appear invisible. To push them out to their appropriate sides, they need to be translated out from the center of their positions. Each side of the cube is 200px wide. From the cube&#8217;s center they&#8217;ll need to be translated out half that distance, <code>100px</code>.</p>
+<div class='highlight'><pre><code class='css'><span class='nf'>#cube</span> <span class='nc'>.front</span>  <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateY</span><span class='p'>(</span>   <span class='m'>0</span><span class='n'>deg</span> <span class='p'>)</span> <span class='n'>translateZ</span><span class='p'>(</span> <span class='m'>100px</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#cube</span> <span class='nc'>.back</span>   <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateX</span><span class='p'>(</span> <span class='m'>180</span><span class='n'>deg</span> <span class='p'>)</span> <span class='n'>translateZ</span><span class='p'>(</span> <span class='m'>100px</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#cube</span> <span class='nc'>.right</span>  <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateY</span><span class='p'>(</span>  <span class='m'>90</span><span class='n'>deg</span> <span class='p'>)</span> <span class='n'>translateZ</span><span class='p'>(</span> <span class='m'>100px</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#cube</span> <span class='nc'>.left</span>   <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateY</span><span class='p'>(</span> <span class='m'>-90</span><span class='n'>deg</span> <span class='p'>)</span> <span class='n'>translateZ</span><span class='p'>(</span> <span class='m'>100px</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#cube</span> <span class='nc'>.top</span>    <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateX</span><span class='p'>(</span>  <span class='m'>90</span><span class='n'>deg</span> <span class='p'>)</span> <span class='n'>translateZ</span><span class='p'>(</span> <span class='m'>100px</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#cube</span> <span class='nc'>.bottom</span> <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateX</span><span class='p'>(</span> <span class='m'>-90</span><span class='n'>deg</span> <span class='p'>)</span> <span class='n'>translateZ</span><span class='p'>(</span> <span class='m'>100px</span> <span class='p'>);</span> <span class='p'>}</span>
+</code></pre>
+</div>
+<p>Note here that the <code>translateZ</code> function comes <em>after</em> the <code>rotate</code>. The order of transform functions is important. Take a moment and soak this in. Each face is first rotated towards its position, then translated outward in a separate vector.</p>
+
+<p>We have a working cube, but we&#8217;re not done yet.</p>
+
+<h2 id='returning_to_the_z_origin_plane'>Returning to the Z origin plane</h2>
+
+<p>For the sake of our users, our 3D transforms should not distort the interface when the active panel is at its resting position. But once we start pushing elements out of the Z origin plane, distortion is inevitable.</p>
+
+<p>In order to keep 3D transforms snappy, Safari composites the element then applies the transform. Consequently, anti-aliasing on text will remain whatever it was before the transform was applied. When transformed forward in 3D space, significant pixelation can occur.</p>
+
+<p><a href='../examples/transforms-02-pixelation.html'><strong>See Example: Transforms 2</strong></a></p>
+
+<p><a href='../examples/transforms-02-pixelation.html'><img src='../img/pixelation01.png' alt='Using 3D transforms can pixelate text' /></a></p>
+
+<p>Looking at back at the &#8220;Perspective 3 demo&#8221;:../examples/perspective-03.html, note that no matter how small the perspective value is, or where ever the transform origin may be, the 1 panel always returns to its original position, as if all those funky 3D transforms didn&#8217;t even matter.</p>
+
+<p>To resolve the distortion and restore pixel perfection on our <code>#cube</code>, we can push back the 3D object, so that the front face will be positioned back at the Z origin.</p>
+<div class='highlight'><pre><code class='css'><span class='nf'>#cube</span> <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>translateZ</span><span class='p'>(</span> <span class='m'>-100px</span> <span class='p'>);</span> <span class='p'>}</span>
+</code></pre>
+</div>
+<p><a href='../examples/cube-01-steps.html'><strong>See Example: Cube 1</strong></a></p>
+
+<p><a href='../examples/cube-01-steps.html'><img src='../img/cube01.png' alt='CSS 3D cube object' /></a></p>
+
+<p>To expose any face of the cube, we&#8217;ll need a style that rotates the cube to expose any face. The transform is the opposite of the corresponding face. We toggle the necessary class on the <code>#box</code> to apply the appropriate transform.</p>
+<div class='highlight'><pre><code class='css'><span class='nf'>#cube</span><span class='nc'>.show-front</span>  <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>translateZ</span><span class='p'>(</span> <span class='m'>-100px</span> <span class='p'>)</span> <span class='n'>rotateY</span><span class='p'>(</span>    <span class='m'>0</span><span class='n'>deg</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#cube</span><span class='nc'>.show-back</span>   <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>translateZ</span><span class='p'>(</span> <span class='m'>-100px</span> <span class='p'>)</span> <span class='n'>rotateX</span><span class='p'>(</span> <span class='m'>-180</span><span class='n'>deg</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#cube</span><span class='nc'>.show-right</span>  <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>translateZ</span><span class='p'>(</span> <span class='m'>-100px</span> <span class='p'>)</span> <span class='n'>rotateY</span><span class='p'>(</span>  <span class='m'>-90</span><span class='n'>deg</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#cube</span><span class='nc'>.show-left</span>   <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>translateZ</span><span class='p'>(</span> <span class='m'>-100px</span> <span class='p'>)</span> <span class='n'>rotateY</span><span class='p'>(</span>   <span class='m'>90</span><span class='n'>deg</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#cube</span><span class='nc'>.show-top</span>    <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>translateZ</span><span class='p'>(</span> <span class='m'>-100px</span> <span class='p'>)</span> <span class='n'>rotateX</span><span class='p'>(</span>  <span class='m'>-90</span><span class='n'>deg</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#cube</span><span class='nc'>.show-bottom</span> <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>translateZ</span><span class='p'>(</span> <span class='m'>-100px</span> <span class='p'>)</span> <span class='n'>rotateX</span><span class='p'>(</span>   <span class='m'>90</span><span class='n'>deg</span> <span class='p'>);</span> <span class='p'>}</span>
+</code></pre>
+</div>
+<p>Notice how the order of the transform functions has reversed. First we push the object back with <code>translateZ</code>, then we rotate it.</p>
+
+<p>Finishing up, we can add a transition to animate the rotation between states.</p>
+<div class='highlight'><pre><code class='css'><span class='nf'>#cube</span> <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transition</span><span class='o'>:</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span> <span class='m'>1</span><span class='err'>s</span><span class='p'>;</span> <span class='p'>}</span>
+</code></pre>
+</div>
+<p><a href='../examples/cube-02-show-sides.html'><strong>See Example: Cube 2</strong></a></p>
+
+<p><a href='../examples/cube-02-show-sides.html'><img src='../img/cube02.png' alt='CSS 3D cube object changing sides' /></a></p>
+    
+  </section> <!-- #content -->
+  
+  <footer>
+    <p><a href="../../">Intro to CSS 3D transforms</a> by David DeSandro</p>
+  </footer>
+
+</body>
+</html>

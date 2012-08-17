@@ -1,0 +1,94 @@
+
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  
+  <!-- disable zooming -->
+  <meta name="viewport" content="initial-scale=1.0; minimum-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+  
+  <title>3d transform functions &middot; Intro to CSS 3D transforms &rsaquo; Docs</title>
+  
+    <link rel="stylesheet" href="../css/style.css" media="screen" />
+
+</head>
+<body class="doc">
+
+  <nav>
+  <h1><a href="../">Intro to CSS 3D transforms</a></h1>
+  <ul>
+    
+      <li><a href="../docs/introduction.html">Introduction</a></li>
+    
+      <li><a href="../docs/perspective.html">Perspective</a></li>
+    
+      <li class="current"><a href="../docs/3d-transform-functions.html">3d transform functions</a></li>
+    
+      <li><a href="../docs/card-flip.html">Card Flip</a></li>
+    
+      <li><a href="../docs/cube.html">Cube</a></li>
+    
+      <li><a href="../docs/rectangular-prism.html">Rectangular prism</a></li>
+    
+      <li><a href="../docs/carousel.html">Carousel</a></li>
+    
+      <li><a href="../docs/conclusion.html">Conclusion</a></li>
+    
+  </ul>
+</nav>
+
+  <section id="content">
+
+    <h1>3d transform functions</h1>
+
+    <p>As a web designer, you&#8217;re probably well acquainted with working in two dimensions, X and Y, positioning items horizontally and vertically. With a 3D space initialized with <code>perspective</code>, we can now transform elements in all three glorious spatial dimensions, including the third Z dimension.</p>
+
+<p>3D transforms use the same <code>transform</code> property used for 2D transforms. If you&#8217;re familiar with 2D transforms, you&#8217;ll find the basic <a href='http://www.w3.org/TR/css3-3d-transforms/#transform-functions'>3D transform functions</a> fairly similar.</p>
+
+<ul>
+<li><code>rotateX( angle )</code></li>
+
+<li><code>rotateY( angle )</code></li>
+
+<li><code>rotateZ( angle )</code></li>
+
+<li><code>translateZ( tz )</code></li>
+
+<li><code>scaleZ( sz )</code></li>
+</ul>
+
+<p>Whereas <code>translateX()</code> positions an element along the horizontal X axis, <code>translateZ()</code> positions it along the Z axis, which runs front to back in 3D space. Positive values position the element closer to the viewer, negative values further away.</p>
+
+<p>The <code>rotate</code> functions rotate the element around the corresponding axis. This is a bit counter-intuitive at first as you might imagine that <code>rotateX</code> will spin an object left to right. Instead, using <code>rotateX( 45deg )</code> rotates an element <em>around</em> the horizontal X axis, so the top of the element angles back and away, and the bottom angles near.</p>
+
+<p><a href='../examples/transforms-01-functions.html'><strong>See Example: Transforms 1</strong></a></p>
+
+<p><a href='../examples/transforms-01-functions.html'><img src='../img/transforms01.png' alt='CSS 3D transform functions' /></a></p>
+
+<p>There&#8217;s also several shorthand transform functions that require values for all three dimensions:</p>
+
+<ul>
+<li><code>translate3d( tx, ty, tz )</code></li>
+
+<li><code>scale3d( sx, sy, sz )</code></li>
+
+<li><code>rotate3d( rx, ry, rz, angle )</code></li>
+</ul>
+
+<p><strong>Pro-tip:</strong> These <code>foo3d()</code> transform functions also have the benefit of triggering hardware acceleration in Safari. Dean Jackson, CSS 3D transform spec author and main WebKit dude, writes (by way of <a href='http://mir.aculo.us/2010/08/05/html5-buzzwords-in-action/'>Thomas Fuchs</a>):</p>
+
+<blockquote>
+<p>In essence, any transform that has a 3D operation as one of its functions will trigger hardware compositing, even when the actual transform is 2D, or not doing anything at all (such as <code>translate3d(0,0,0)</code>). Note this is just current behaviour, and could change in the future (which is why we don&#8217;t document or encourage it). But it is very helpful in some situations and can significantly improve redraw performance.</p>
+</blockquote>
+
+<p>For the sake of simplicity, these demos will use the basic transform functions, but if you&#8217;re writing production-ready CSS for iOS or Safari-only, <strong>make sure to use the <code>foo3d()</code> functions to get the best rendering performance.</strong></p>
+    
+  </section> <!-- #content -->
+  
+  <footer>
+    <p><a href="../../">Intro to CSS 3D transforms</a> by David DeSandro</p>
+  </footer>
+
+</body>
+</html>

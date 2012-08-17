@@ -1,0 +1,124 @@
+
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  
+  <!-- disable zooming -->
+  <meta name="viewport" content="initial-scale=1.0; minimum-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+  
+  <title>Rectangular prism &middot; Intro to CSS 3D transforms &rsaquo; Docs</title>
+  
+    <link rel="stylesheet" href="../css/style.css" media="screen" />
+
+</head>
+<body class="doc">
+
+  <nav>
+  <h1><a href="../">Intro to CSS 3D transforms</a></h1>
+  <ul>
+    
+      <li><a href="../docs/introduction.html">Introduction</a></li>
+    
+      <li><a href="../docs/perspective.html">Perspective</a></li>
+    
+      <li><a href="../docs/3d-transform-functions.html">3d transform functions</a></li>
+    
+      <li><a href="../docs/card-flip.html">Card Flip</a></li>
+    
+      <li><a href="../docs/cube.html">Cube</a></li>
+    
+      <li class="current"><a href="../docs/rectangular-prism.html">Rectangular prism</a></li>
+    
+      <li><a href="../docs/carousel.html">Carousel</a></li>
+    
+      <li><a href="../docs/conclusion.html">Conclusion</a></li>
+    
+  </ul>
+</nav>
+
+  <section id="content">
+
+    <h1>Rectangular prism</h1>
+
+    <p>Cube objects are easy enough to generate as we only have to worry about one measurement. But how would we handle a non-regular rectangular prism? Let&#8217;s try to make one 300px wide, 200px high, and 100px deep.</p>
+
+<p>The markup remains the same as the <code>#cube</code>&#8217;s version, but switch the <code>#cube</code> id for <code>#box</code>. The container styles remain mostly the same.</p>
+<div class='highlight'><pre><code class='css'><span class='nc'>.container</span> <span class='p'>{</span>
+  <span class='k'>width</span><span class='o'>:</span> <span class='m'>300px</span><span class='p'>;</span>
+  <span class='k'>height</span><span class='o'>:</span> <span class='m'>200px</span><span class='p'>;</span>
+  <span class='k'>position</span><span class='o'>:</span> <span class='k'>relative</span><span class='p'>;</span>
+  <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>perspective</span><span class='o'>:</span> <span class='m'>1000</span><span class='p'>;</span>
+<span class='p'>}</span>
+
+<span class='nf'>#box</span> <span class='p'>{</span>
+  <span class='k'>width</span><span class='o'>:</span> <span class='m'>100%</span><span class='p'>;</span>
+  <span class='k'>height</span><span class='o'>:</span> <span class='m'>100%</span><span class='p'>;</span>
+  <span class='k'>position</span><span class='o'>:</span> <span class='k'>absolute</span><span class='p'>;</span>
+  <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>-</span><span class='n'>style</span><span class='o'>:</span> <span class='n'>preserve</span><span class='m'>-3</span><span class='err'>d</span><span class='p'>;</span>
+<span class='p'>}</span>
+</code></pre>
+</div>
+<p>Now, to position the faces. Each set of faces will need their own sizes. The smaller faces (left, right, top and bottom) need to be positioned in the center of the container, where they can be easily rotated and then shifted outward. The thinner left and right faces get positioned <code>left: 100px</code> ( (300 - 100) / 2 ), The stouter top and bottom faces get positioned <code>top: 50px</code> ( (200 - 100) / 2 ).</p>
+<div class='highlight'><pre><code class='css'><span class='nf'>#box</span> <span class='nt'>figure</span> <span class='p'>{</span>
+  <span class='k'>display</span><span class='o'>:</span> <span class='k'>block</span><span class='p'>;</span>
+  <span class='k'>position</span><span class='o'>:</span> <span class='k'>absolute</span><span class='p'>;</span>
+  <span class='k'>border</span><span class='o'>:</span> <span class='m'>2px</span> <span class='k'>solid</span> <span class='nb'>black</span><span class='p'>;</span>
+<span class='p'>}</span>
+
+<span class='nf'>#box</span> <span class='nc'>.front</span><span class='o'>,</span>
+<span class='nf'>#box</span> <span class='nc'>.back</span> <span class='p'>{</span>
+  <span class='k'>width</span><span class='o'>:</span> <span class='m'>296px</span><span class='p'>;</span>
+  <span class='k'>height</span><span class='o'>:</span> <span class='m'>196px</span><span class='p'>;</span>
+<span class='p'>}</span>
+
+<span class='nf'>#box</span> <span class='nc'>.right</span><span class='o'>,</span>
+<span class='nf'>#box</span> <span class='nc'>.left</span> <span class='p'>{</span>
+  <span class='k'>width</span><span class='o'>:</span> <span class='m'>96px</span><span class='p'>;</span>
+  <span class='k'>height</span><span class='o'>:</span> <span class='m'>196px</span><span class='p'>;</span>
+  <span class='k'>left</span><span class='o'>:</span> <span class='m'>100px</span><span class='p'>;</span>
+<span class='p'>}</span>
+
+<span class='nf'>#box</span> <span class='nc'>.top</span><span class='o'>,</span>
+<span class='nf'>#box</span> <span class='nc'>.bottom</span> <span class='p'>{</span>
+  <span class='k'>width</span><span class='o'>:</span> <span class='m'>296px</span><span class='p'>;</span>
+  <span class='k'>height</span><span class='o'>:</span> <span class='m'>96px</span><span class='p'>;</span>
+  <span class='k'>top</span><span class='o'>:</span> <span class='m'>50px</span><span class='p'>;</span>
+<span class='p'>}</span>
+</code></pre>
+</div>
+<p>The rotate values all can remain the same as in the cube example, but for this rectangular prism, the translate values do differ. The front and back faces each are shifted out <code>50px</code> since the <code>#box</code> is 100px deep. Left and right faces translate is <code>150px</code> for 300px width. Top and bottom panels go <code>100px</code> for the 200px height.</p>
+<div class='highlight'><pre><code class='css'><span class='nf'>#box</span> <span class='nc'>.front</span>  <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateY</span><span class='p'>(</span>   <span class='m'>0</span><span class='n'>deg</span> <span class='p'>)</span> <span class='n'>translateZ</span><span class='p'>(</span>  <span class='m'>50px</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#box</span> <span class='nc'>.back</span>   <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateX</span><span class='p'>(</span> <span class='m'>180</span><span class='n'>deg</span> <span class='p'>)</span> <span class='n'>translateZ</span><span class='p'>(</span>  <span class='m'>50px</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#box</span> <span class='nc'>.right</span>  <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateY</span><span class='p'>(</span>  <span class='m'>90</span><span class='n'>deg</span> <span class='p'>)</span> <span class='n'>translateZ</span><span class='p'>(</span> <span class='m'>150px</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#box</span> <span class='nc'>.left</span>   <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateY</span><span class='p'>(</span> <span class='m'>-90</span><span class='n'>deg</span> <span class='p'>)</span> <span class='n'>translateZ</span><span class='p'>(</span> <span class='m'>150px</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#box</span> <span class='nc'>.top</span>    <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateX</span><span class='p'>(</span>  <span class='m'>90</span><span class='n'>deg</span> <span class='p'>)</span> <span class='n'>translateZ</span><span class='p'>(</span> <span class='m'>100px</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#box</span> <span class='nc'>.bottom</span> <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>rotateX</span><span class='p'>(</span> <span class='m'>-90</span><span class='n'>deg</span> <span class='p'>)</span> <span class='n'>translateZ</span><span class='p'>(</span> <span class='m'>100px</span> <span class='p'>);</span> <span class='p'>}</span>
+</code></pre>
+</div>
+<p><a href='../examples/box-01-steps.html'><strong>See Example: Box 1</strong></a></p>
+
+<p><a href='../examples/box-01-steps.html'><img src='../img/box01.png' alt='3D CSS box object' /></a></p>
+
+<p>Just like the cube example, to expose a face, the <code>#box</code> needs to have a style to reverse its face&#8217;s transform. Both the <code>translateZ</code> and <code>rotate</code> values are the opposites of the corresponding face.</p>
+<div class='highlight'><pre><code class='css'><span class='nf'>#box</span><span class='nc'>.show-front</span>  <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>translateZ</span><span class='p'>(</span>  <span class='m'>-50px</span> <span class='p'>)</span> <span class='n'>rotateY</span><span class='p'>(</span>    <span class='m'>0</span><span class='n'>deg</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#box</span><span class='nc'>.show-back</span>   <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>translateZ</span><span class='p'>(</span>  <span class='m'>-50px</span> <span class='p'>)</span> <span class='n'>rotateX</span><span class='p'>(</span> <span class='m'>-180</span><span class='n'>deg</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#box</span><span class='nc'>.show-right</span>  <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>translateZ</span><span class='p'>(</span> <span class='m'>-150px</span> <span class='p'>)</span> <span class='n'>rotateY</span><span class='p'>(</span>  <span class='m'>-90</span><span class='n'>deg</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#box</span><span class='nc'>.show-left</span>   <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>translateZ</span><span class='p'>(</span> <span class='m'>-150px</span> <span class='p'>)</span> <span class='n'>rotateY</span><span class='p'>(</span>   <span class='m'>90</span><span class='n'>deg</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#box</span><span class='nc'>.show-top</span>    <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>translateZ</span><span class='p'>(</span> <span class='m'>-100px</span> <span class='p'>)</span> <span class='n'>rotateX</span><span class='p'>(</span>  <span class='m'>-90</span><span class='n'>deg</span> <span class='p'>);</span> <span class='p'>}</span>
+<span class='nf'>#box</span><span class='nc'>.show-bottom</span> <span class='p'>{</span> <span class='o'>-</span><span class='n'>webkit</span><span class='o'>-</span><span class='n'>transform</span><span class='o'>:</span> <span class='n'>translateZ</span><span class='p'>(</span> <span class='m'>-100px</span> <span class='p'>)</span> <span class='n'>rotateX</span><span class='p'>(</span>   <span class='m'>90</span><span class='n'>deg</span> <span class='p'>);</span> <span class='p'>}</span>
+</code></pre>
+</div>
+<p><a href='../examples/box-02-show-sides.html'><strong>See Example: Box 2</strong></a></p>
+
+<p><a href='../examples/box-02-show-sides.html'><img src='../img/box02.png' alt='3D CSS box object rotating' /></a></p>
+    
+  </section> <!-- #content -->
+  
+  <footer>
+    <p><a href="../../">Intro to CSS 3D transforms</a> by David DeSandro</p>
+  </footer>
+
+</body>
+</html>

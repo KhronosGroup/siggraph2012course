@@ -1,0 +1,80 @@
+
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  
+  <!-- disable zooming -->
+  <meta name="viewport" content="initial-scale=1.0; minimum-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+  
+  <title>Perspective &middot; Intro to CSS 3D transforms &rsaquo; Docs</title>
+  
+    <link rel="stylesheet" href="../css/style.css" media="screen" />
+
+</head>
+<body class="doc">
+
+  <nav>
+  <h1><a href="../">Intro to CSS 3D transforms</a></h1>
+  <ul>
+    
+      <li><a href="../docs/introduction.html">Introduction</a></li>
+    
+      <li class="current"><a href="../docs/perspective.html">Perspective</a></li>
+    
+      <li><a href="../docs/3d-transform-functions.html">3d transform functions</a></li>
+    
+      <li><a href="../docs/card-flip.html">Card Flip</a></li>
+    
+      <li><a href="../docs/cube.html">Cube</a></li>
+    
+      <li><a href="../docs/rectangular-prism.html">Rectangular prism</a></li>
+    
+      <li><a href="../docs/carousel.html">Carousel</a></li>
+    
+      <li><a href="../docs/conclusion.html">Conclusion</a></li>
+    
+  </ul>
+</nav>
+
+  <section id="content">
+
+    <h1>Perspective</h1>
+
+    <p>To activate 3D space, an element needs perspective. This can be applied in two ways: using the <code>transform</code> property, with the perspective as a functional notation.</p>
+<div class='highlight'><pre><code class='css'><span class='nt'>-webkit-transform</span><span class='o'>:</span> <span class='nt'>perspective</span><span class='o'>(</span> <span class='nt'>600</span> <span class='o'>);</span>
+</code></pre>
+</div>
+<p>or using the <code>perspective</code> property:</p>
+<div class='highlight'><pre><code class='css'><span class='nt'>-webkit-perspective</span><span class='o'>:</span> <span class='nt'>600</span><span class='o'>;</span>
+</code></pre>
+</div>
+<p><a href='../examples/perspective-01.html'><strong>See Example: Perspective 1</strong></a></p>
+
+<p><a href='../examples/perspective-01.html'><img src='../img/perspective01.png' alt='Perspective property at work' /></a></p>
+
+<p>These two formats both trigger a 3D space, but there is a difference. The functional notation is convenient for directly applying a 3D transform on a single element (in <a href='../examples/perspective-01.html'>the previous example</a>, I use it in conjunction with a <code>rotateX</code> transform). But when used on multiple elements, the transformed elements don&#8217;t line up as expected. If you use the same transform across elements with different positions, each element will have its own vanishing point. To remedy this, use the <code>perspective</code> property on a parent element, so each child may share the same 3D space.</p>
+
+<p><a href='../examples/perspective-02-children.html'><strong>See Example: Perspective 2</strong></a></p>
+
+<p><a href='../examples/perspective-02-children.html'><img src='../img/perspective-children01.png' alt='Perspective differences when used with child elements' /></a></p>
+
+<p>The value of <code>perspective</code> determines the intensity of the 3D effect. Think of it as a distance from the viewer to the object. The greater the value, the further the distance, the less intense the visual effect. <code>perspective: 2000;</code> yields a subtle 3D effect, as if we are viewing an object from far away through binoculars. <code>perspective: 100;</code> produces a tremendous 3D effect, like a tiny insect viewing a massive object.</p>
+
+<p>By default, the vanishing point for a 3D space is positioned at the center. You can change the position of the vanishing point with <code>perspective-origin</code> property.</p>
+<div class='highlight'><pre><code class='css'><span class='nt'>-webkit-perspective-origin</span><span class='o'>:</span> <span class='nt'>25</span><span class='o'>%</span> <span class='nt'>75</span><span class='o'>%;</span>
+</code></pre>
+</div>
+<p><a href='../examples/perspective-03.html'><strong>See Example: Perspective 3</strong></a></p>
+
+<p><a href='../examples/perspective-03.html'><img src='../img/perspective02.png' alt='Intense perspective value, with vanishing point modified' /></a></p>
+    
+  </section> <!-- #content -->
+  
+  <footer>
+    <p><a href="../../">Intro to CSS 3D transforms</a> by David DeSandro</p>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,45 @@
+<html>
+<head>
+<script type="text/javascript">
+
+function log(msg)
+{
+  var textArea;
+
+  textArea = document.getElementById("logArea");
+  textArea.value = msg + "\n" + textArea.value;
+}
+
+function clearLog()
+{
+  var textArea;
+
+  textArea = document.getElementById("logArea");
+  textArea.value = "";
+}
+
+</script>
+
+<script type="text/javascript" src="blobsallad.js">
+</script>
+
+<style type="text/css">
+  canvas { }
+</style>
+
+</head>
+
+<body onload="init();">
+
+<canvas id="blob" width="600" height="400"></canvas><br>
+<a href="javascript:stop()">pause simulation</a>
+<a href="javascript:start()">resume simulation</a> <br><br>
+From <a href="http://www.blobsallad.se/">http://www.blobsallad.se </a> Written by: bjoern.lindberg@gmail.com<br>
+Move around Blob with arrow keys or mouse.<br>
+Split blob with h.<br>
+Join blobs with j. <br>
+Turn gravity on / off with g.<br>
+
+
+</body>
+</head>
