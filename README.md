@@ -23,3 +23,5 @@ git config --add remote.origin.push +refs/heads/master:refs/heads/master
 git config --add remote.origin.push +refs/heads/master:refs/heads/gh-pages
 
 Then a "git push" with the master branch checked out will also update the gh-pages branch, which is served by Github.
+
+Thanks to http://stackoverflow.com/questions/5807459/github-mirroring-gh-pages-to-master .
