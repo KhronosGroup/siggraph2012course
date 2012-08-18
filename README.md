@@ -19,7 +19,7 @@ Keeping the served content up to date
 
 Run the following commands once in your repository upon initial checkout:
 
-git config --add remote.origin.push +refs/heads/master:refs/heads/master
+git config --add remote.origin.push +refs/heads/master:refs/heads/master  
 git config --add remote.origin.push +refs/heads/master:refs/heads/gh-pages
 
 Then a "git push" with the master branch checked out will also update the gh-pages branch, which is served by Github.
